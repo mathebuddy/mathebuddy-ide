@@ -8,9 +8,7 @@
 
 USE mathebuddy;
 
-/*
-    Provides files. For each save, a new row is added.
-*/
+/* Provides files. For each save, a new row is added. */
 CREATE OR REPLACE TABLE Content (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     contentPath TEXT,
@@ -21,6 +19,7 @@ CREATE OR REPLACE TABLE Content (
 
 -- insert into Content (contentPath, contentVersion, contentData) values ('hm1/intro.txt', 1, 'blub');
 
+/* Users */
 CREATE OR REPLACE TABLE User (
     id INTEGER PRIMARY key AUTO_INCREMENT,
     userLogin TEXT,
@@ -30,11 +29,12 @@ CREATE OR REPLACE TABLE User (
     userAdmin BOOLEAN DEFAULT '0'
 );
 
-INSERT INTO User 
+INSERT INTO User
     (userLogin, userMail, userPasswordHash, userAdmin)
-    VALUES 
+    VALUES
     ('admin', '', '', 1);
 
+/* User privileges */
 CREATE OR REPLACE TABLE Access (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     accessUserLogin TEXT DEFAULT '',
@@ -45,12 +45,14 @@ CREATE OR REPLACE TABLE Access (
     accessDate DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+/* quality assurance attributes */
 CREATE OR REPLACE TABLE QA (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     qaContentPath TEXT DEFAULT '',
     qaAttribute TEXT DEFAULT ''
 );
 
+/* chat */
 CREATE OR REPLACE TABLE Chat (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     chatUserLogin TEXT DEFAULT '',
