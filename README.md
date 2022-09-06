@@ -1,6 +1,8 @@
 # mathebuddy-ide
 
-This repository contains the *mathebuddy* Integrated Development Environment (IDE).
+This repository contains the _mathebuddy_ Integrated Development Environment (IDE).
+
+> ATTENTION: this repository is work-in-progress. Migration from https://github.com/sellquiz/sellquiz-language-workbench + new implementations will be done in the next weeks.
 
 ## Installation
 
