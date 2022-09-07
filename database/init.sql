@@ -14,6 +14,7 @@ CREATE OR REPLACE TABLE Content (
     contentPath TEXT,
     contentOrder INTEGER DEFAULT 0,
     contentVersion INTEGER DEFAULT 1,
+    contentUserId INTEGER DEFAULT 0,
     contentData LONGTEXT CHARACTER SET utf8 DEFAULT '',
     contentDate DATETIME DEFAULT CURRENT_TIMESTAMP
 );
