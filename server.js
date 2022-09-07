@@ -61,23 +61,24 @@ app.get('/', (request, response) => {
   response.sendFile('index.html', { root: __dirname });
 });
 
-app.get('/blub', (request, response) => {
-  if (
-    typeof request.session.userName === 'undefined' ||
-    request.session.userName.length == 0
-  ) {
-    response.send({});
-    response.end();
-    return;
-  }
-  const query = 'SELECT id FROM Content;';
+app.post('/readCourseConfig', (request, response) => {
+  // TODO: only get content rows with write access for current user
+  const query =
+    'SELECT id, contentPath, contentVersion, contentUserId, ' +
+    'contentDate FROM Content ORDER BY contentOrder ASC';
   connection.query(query, [], function (error, results, fields) {
+    console.log('error: ' + error);
+    console.log(results);
     for (const entry of results) {
       console.log(entry);
     }
     response.send('blub');
     response.end();
   });
+});
+
+app.post('/writeCourseConfig', (request, response) => {
+  const query = 'TODO';
 });
 
 app.post('/login', (request, response) => {
