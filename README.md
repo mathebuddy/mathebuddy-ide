@@ -33,6 +33,14 @@ Create tables with file `database/init.sql` from this repository:
 mariadb < database/init.sql
 ```
 
+Create database user and set privileges:
+
+```bash
+CREATE USER mathebuddy@localhost IDENTIFIED BY 'mathebuddy';
+GRANT ALL ON mathebuddy.* TO mathebuddy@localhost;
+FLUSH PRIVILEGES;
+```
+
 ### Configuration
 
 Copy the configuration template and make changes if necessary (file `server-config.json` is untracked in git):
