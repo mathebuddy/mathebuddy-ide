@@ -13,28 +13,38 @@
     netstat -ltnp | grep -w ':3000'
 */
 
-import express from 'express';
-import session from 'express-session';
-import mysql from 'mysql';
-import bcrypt from 'bcryptjs';
+const fs = require('fs');
+const process = require('process');
+const express = require('express');
+const session = require('express-session');
+const mysql = require('mysql');
+const bcrypt = require('bcryptjs');
 
 console.log('mathe:buddy IDE, 2022 by Andreas Schwenk, TH Koeln');
-console.log('Started: ' + new Date().toLocaleString());
+
+if (fs.existsSync('server-config.json') == false) {
+  console.error('Configuration file "server-config.json" does not exist.');
+  console.error('Must copy server-config-template.json to server-config.json!');
+  process.exit(-1);
+}
+const config = JSON.parse(fs.readFileSync('server-config.json', 'utf-8'));
 
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'mathebuddy',
-  password: 'mathebuddy', // database only accessible from localhost!
-  database: 'mathebuddy',
+  host: config['db-host'],
+  user: config['db-user'],
+  password: config['db-password'],
+  database: config['db-database'],
   multipleStatements: false,
 });
 
 const app = express();
 
+console.log('Started: ' + new Date().toLocaleString());
+
 app.use(
   session({
     secret: 'secret',
-    key: 'myCookie',
+    //key: 'myCookie', TODO
     cookie: { httpOnly: false, sameSite: true },
     resave: true,
     saveUninitialized: true,
@@ -43,6 +53,9 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/node_modules', express.static(__dirname + '/node_modules'));
+app.use('/build', express.static(__dirname + '/build'));
+app.use('/img', express.static(__dirname + '/img'));
 
 app.get('/', (request, response) => {
   response.sendFile('index.html', { root: __dirname });
@@ -50,14 +63,14 @@ app.get('/', (request, response) => {
 
 app.get('/blub', (request, response) => {
   if (
-    typeof request.session.username === 'undefined' ||
-    request.session.username.length == 0
+    typeof request.session.userName === 'undefined' ||
+    request.session.userName.length == 0
   ) {
     response.send({});
     response.end();
     return;
   }
-  let query = 'SELECT id FROM Content;';
+  const query = 'SELECT id FROM Content;';
   connection.query(query, [], function (error, results, fields) {
     for (const entry of results) {
       console.log(entry);
@@ -68,29 +81,29 @@ app.get('/blub', (request, response) => {
 });
 
 app.post('/login', (request, response) => {
-  const username = request.body.username;
+  const username = request.body.userName;
   const password = request.body.password;
   const query =
     'SELECT userPasswordHash FROM User WHERE userLogin=' +
     mysql.escape(username);
   connection.query(query, [], function (error, results, fields) {
     if (error) {
-      request.session.username = '';
+      request.session.userName = '';
       response.send('LOGIN FAILED');
       response.end();
       return;
     }
     const passwordHashFromDB = results[0].password;
     if (bcrypt.compareSync(password, passwordHashFromDB)) {
-      request.session.username = username;
-      request.session.userid = parseInt(results[0].id);
+      request.session.userName = username;
+      request.session.userId = parseInt(results[0].id);
       console.log(
-        'user ' + username + ' (' + request.session.userid + ') logged in.',
+        'user ' + username + ' (' + request.session.userId + ') logged in.',
       );
       response.send('LOGIN OK');
     } else {
-      request.session.username = '';
-      request.session.userid = -1;
+      request.session.userName = '';
+      request.session.userId = -1;
       response.send('WRONG LOGIN DATA');
     }
     response.end();
@@ -98,9 +111,9 @@ app.post('/login', (request, response) => {
 });
 
 app.post('/logout', (request, response) => {
-  request.session.username = '';
-  request.session.userid = -1;
+  request.session.userName = '';
+  request.session.userId = -1;
   response.end();
 });
 
-app.listen(3000);
+app.listen(config['port']);

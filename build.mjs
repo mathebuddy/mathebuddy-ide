@@ -9,9 +9,10 @@
 import * as esbuild from 'esbuild';
 
 esbuild.buildSync({
-  platform: 'node',
+  platform: 'browser',
+  globalName: 'mathebuddyIDE',
   minify: true,
-  target: 'node11',
+  target: 'es2020',
   entryPoints: ['src/index.ts'],
   bundle: true,
   outfile: 'build/mathebuddy-ide.min.js',

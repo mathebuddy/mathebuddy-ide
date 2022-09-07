@@ -12,6 +12,7 @@ USE mathebuddy;
 CREATE OR REPLACE TABLE Content (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     contentPath TEXT,
+    contentOrder INTEGER DEFAULT 0,
     contentVersion INTEGER DEFAULT 1,
     contentData LONGTEXT CHARACTER SET utf8 DEFAULT '',
     contentDate DATETIME DEFAULT CURRENT_TIMESTAMP

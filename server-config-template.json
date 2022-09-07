@@ -1,0 +1,7 @@
+{
+  "db-host": "localhost",
+  "db-database": "mathebuddy",
+  "db-user": "mathebuddy",
+  "db-password": "mathebuddy",
+  "port": 3000
+}

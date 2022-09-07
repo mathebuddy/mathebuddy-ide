@@ -5,7 +5,10 @@
   "editor.formatOnSave": true,
   "cSpell.words": [
     "Andreas",
+    "clike",
+    "codemirror",
     "Decrementation",
+    "dont",
     "ebnf",
     "eine",
     "elif",
@@ -14,6 +17,7 @@
     "fortawesome",
     "FREIRAUM",
     "gamifizierte",
+    "geedmo",
     "Hochschullehre",
     "Hoehere",
     "IMAG",
@@ -32,6 +36,7 @@
     "Schwenk",
     "SMPL",
     "Stiftung",
-    "userid"
+    "userid",
+    "yamm"
   ]
 }

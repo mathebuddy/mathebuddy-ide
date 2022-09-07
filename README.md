@@ -27,8 +27,26 @@ Access MariaDB as root user `sudo mariadb -p`. Create a new database:
 CREATE DATABASE mathebuddy;
 ```
 
-Create tables with file `data/init.sql` from this repository:
+Create tables with file `database/init.sql` from this repository:
 
 ```bash
-mariadb < data/init.sql
+mariadb < database/init.sql
 ```
+
+### Configuration
+
+Copy the configuration template and make changes if necessary (file `server-config.json` is untracked in git):
+
+```bash
+cp server-config-template.json server-config.json
+```
+
+| Property      | Description |
+| ------------- | ----------- |
+| `db-host`     | TODO        |
+| `db-database` | TODO        |
+| `db-user`     | TODO        |
+| `db-password` | TODO        |
+| `port`        | TODO        |
+
+Make changes, if needed.
