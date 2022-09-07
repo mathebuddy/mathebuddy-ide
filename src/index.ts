@@ -17,6 +17,7 @@ import 'codemirror/addon/mode/overlay';
 import * as CodeMirror from 'codemirror';
 
 export let editor: CodeMirror.EditorFromTextArea = null;
+export let courseEditor: CodeMirror.EditorFromTextArea = null;
 export let userEditor: CodeMirror.EditorFromTextArea = null;
 
 export function init(): void {
@@ -41,6 +42,24 @@ export function init(): void {
       lineComment: '%',
     },
   });
+
+  courseEditor = CodeMirror.fromTextArea(
+    document.getElementById('courseEditor') as HTMLTextAreaElement,
+    {
+      mode: 'plaintext',
+      lineNumbers: false,
+      lineWrapping: true,
+    },
+  );
+  courseEditor.setSize(null, '100%');
+  courseEditor.setValue(`# FILES
+
+hm1/intro
+hm1/functions-intro
+
+hm2/complex-intro
+hm2/complex-series
+`);
 
   userEditor = CodeMirror.fromTextArea(
     document.getElementById('userEditor') as HTMLTextAreaElement,
@@ -138,10 +157,20 @@ export function openTab(id: string): void {
   document.getElementById('empty-submenu').style.display =
     id !== 'course-editor' && id !== 'user-management' ? 'block' : 'none';
   // refresh codemirror editors
-  if (id === 'course-editor') {
-    userEditor.refresh();
-  }
-  if (id === 'user-management') {
-    userEditor.refresh();
-  }
+  if (id === 'course-editor') userEditor.refresh();
+  else if (id === 'course-management') courseEditor.refresh();
+  else if (id === 'user-management') userEditor.refresh();
 }
+
+export function readCourseConfig(): void {
+  axios
+    .post('/readCourseConfig', new URLSearchParams({}))
+    .then(function (response) {
+      console.log('>>>>>' + response.data);
+    })
+    .catch(function (error) {
+      // TODO
+      console.error('ERROR!!' + error);
+    });
+}
+readCourseConfig();
