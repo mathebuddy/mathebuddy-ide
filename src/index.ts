@@ -6,7 +6,7 @@
  * License: GPL-3.0-or-later
  */
 
-import axios from 'axios';
+import * as bootstrap from 'bootstrap';
 
 import 'codemirror/mode/clike/clike';
 import 'codemirror/addon/mode/simple';
@@ -16,9 +16,11 @@ import 'codemirror/addon/mode/overlay';
 // esbuild requires 'codemirror' import AFTER modes and addons
 import * as CodeMirror from 'codemirror';
 
+import { refreshContent } from './content';
+import { refreshUsers } from './users';
+
 export let editor: CodeMirror.EditorFromTextArea = null;
-//export let courseEditor: CodeMirror.EditorFromTextArea = null;
-//export let userEditor: CodeMirror.EditorFromTextArea = null;
+let tooltipList: bootstrap.Tooltip[] = [];
 
 export function init(): void {
   // init code editor
@@ -42,45 +44,6 @@ export function init(): void {
       lineComment: '%',
     },
   });
-
-  /*courseEditor = CodeMirror.fromTextArea(
-    document.getElementById('courseEditor') as HTMLTextAreaElement,
-    {
-      mode: 'plaintext',
-      lineNumbers: false,
-      lineWrapping: true,
-    },
-  );
-  courseEditor.setSize(null, '100%');
-  courseEditor.setValue(`# FILES
-
-hm1/intro
-hm1/functions-intro
-
-hm2/complex-intro
-hm2/complex-series
-`);
-
-  userEditor = CodeMirror.fromTextArea(
-    document.getElementById('userEditor') as HTMLTextAreaElement,
-    {
-      mode: 'plaintext',
-      lineNumbers: false,
-      lineWrapping: true,
-    },
-  );
-  userEditor.setSize(null, '100%');
-  userEditor.setValue(`# USERS
-
-admin
-  admin=true
-
-#test
-#  mail=a@b.com
-#  read=hm1,hm2
-#  write=hm1
-#  qa=hm1
-`);*/
 
   editor = CodeMirror.fromTextArea(
     document.getElementById('editor') as HTMLTextAreaElement,
@@ -157,20 +120,37 @@ export function openTab(id: string): void {
   document.getElementById('empty-submenu').style.display =
     id !== 'course-editor' && id !== 'user-management' ? 'block' : 'none';
   // refresh codemirror editors
-  if (id === 'course-editor') editor.refresh();
-  //else if (id === 'course-management') courseEditor.refresh();
-  //else if (id === 'user-management') userEditor.refresh();
+  if (id === 'course-editor') {
+    editor.refresh();
+    showTooltips();
+  } else if (id === 'course-management') {
+    refreshContent();
+  } else if (id === 'user-management') {
+    refreshUsers();
+  }
 }
 
-export function readCourseConfig(): void {
-  axios
-    .post('/readCourseConfig', new URLSearchParams({}))
-    .then(function (response) {
-      console.log('>>>>>' + response.data);
-    })
-    .catch(function (error) {
-      // TODO
-      console.error('ERROR!!' + error);
-    });
+export function showTooltips(): void {
+  //hideTooltips();
+  // tooltip handling
+  const tooltipTriggerList = [].slice.call(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]'),
+  );
+  tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+  });
 }
-readCourseConfig();
+
+export function hideTooltips(): void {
+  for (const tooltip of tooltipList) {
+    tooltip.hide();
+  }
+  tooltipList = [];
+}
+
+// TODO!!
+import * as diff from 'diff';
+
+const a = 'blubxxx\n1\n2\n3';
+const b = 'blxubxx\n1\n2\n4';
+console.log(diff.diffLines(a, b));
