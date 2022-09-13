@@ -12,14 +12,16 @@ USE mathebuddy;
 CREATE OR REPLACE TABLE Content (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     contentPath TEXT,
-    contentOrder INTEGER DEFAULT 0,
     contentVersion INTEGER DEFAULT 1,
     contentUserId INTEGER DEFAULT 0,
     contentData LONGTEXT CHARACTER SET utf8 DEFAULT '',
     contentDate DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- insert into Content (contentPath, contentVersion, contentData) values ('hm1/intro.txt', 1, 'blub');
+INSERT INTO Content
+  (contentPath, contentVersion, contentData)
+  VALUES
+  ('hm1/intro.txt', 1, 'blub');
 
 /* Users */
 CREATE OR REPLACE TABLE User (
@@ -28,6 +30,7 @@ CREATE OR REPLACE TABLE User (
     userMail TEXT,
     userPasswordHash TEXT,
     userDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    userLastLogin DATETIME DEFAULT CURRENT_TIMESTAMP,
     userAdmin BOOLEAN DEFAULT '0'
 );
 
