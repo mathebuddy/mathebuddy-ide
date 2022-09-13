@@ -17,8 +17,8 @@ import 'codemirror/addon/mode/overlay';
 import * as CodeMirror from 'codemirror';
 
 export let editor: CodeMirror.EditorFromTextArea = null;
-export let courseEditor: CodeMirror.EditorFromTextArea = null;
-export let userEditor: CodeMirror.EditorFromTextArea = null;
+//export let courseEditor: CodeMirror.EditorFromTextArea = null;
+//export let userEditor: CodeMirror.EditorFromTextArea = null;
 
 export function init(): void {
   // init code editor
@@ -43,7 +43,7 @@ export function init(): void {
     },
   });
 
-  courseEditor = CodeMirror.fromTextArea(
+  /*courseEditor = CodeMirror.fromTextArea(
     document.getElementById('courseEditor') as HTMLTextAreaElement,
     {
       mode: 'plaintext',
@@ -80,7 +80,7 @@ admin
 #  read=hm1,hm2
 #  write=hm1
 #  qa=hm1
-`);
+`);*/
 
   editor = CodeMirror.fromTextArea(
     document.getElementById('editor') as HTMLTextAreaElement,
@@ -143,8 +143,8 @@ export function openTab(id: string): void {
   document.getElementById('user-management').style.display =
     id === 'user-management' ? 'block' : 'none';
   // tabs for main panels
-  document.getElementById('tab-editor').className =
-    id === 'editor' ? 'nav-link active' : 'nav-link';
+  document.getElementById('tab-course-editor').className =
+    id === 'course-editor' ? 'nav-link active' : 'nav-link';
   document.getElementById('tab-course-management').className =
     id === 'course-management' ? 'nav-link active' : 'nav-link';
   document.getElementById('tab-user-management').className =
@@ -157,9 +157,9 @@ export function openTab(id: string): void {
   document.getElementById('empty-submenu').style.display =
     id !== 'course-editor' && id !== 'user-management' ? 'block' : 'none';
   // refresh codemirror editors
-  if (id === 'course-editor') userEditor.refresh();
-  else if (id === 'course-management') courseEditor.refresh();
-  else if (id === 'user-management') userEditor.refresh();
+  if (id === 'course-editor') editor.refresh();
+  //else if (id === 'course-management') courseEditor.refresh();
+  //else if (id === 'user-management') userEditor.refresh();
 }
 
 export function readCourseConfig(): void {
