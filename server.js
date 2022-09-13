@@ -61,22 +61,114 @@ app.get('/', (request, response) => {
   response.sendFile('index.html', { root: __dirname });
 });
 
-app.post('/readCourseConfig', (request, response) => {
-  // TODO: only get content rows with write access for current user
+app.post('/writeDB_Content', (request, response) => {
+  // TODO: check if user is allowed to
+  // TODO: check if same path already exists
+  // TODO: write correct user id
+  const path = request.body.path;
   const query =
-    'SELECT id, contentPath, contentVersion, contentUserId, ' +
-    'contentDate FROM Content ORDER BY contentOrder ASC';
+    'INSERT INTO Content ' +
+    '(contentPath, contentVersion, contentUserId, contentData) ' +
+    'VALUES (' +
+    mysql.escape(path) +
+    ", 1, 1, 'still empty')";
   connection.query(query, [], function (error, results, fields) {
-    console.log('error: ' + error);
-    console.log(results);
-    for (const entry of results) {
-      console.log(entry);
-    }
-    response.send('blub');
+    response.send('OK');
     response.end();
   });
 });
 
+app.post('/readDB_Content', (request, response) => {
+  // TODO: only get content rows with write access for current user
+  const query =
+    'SELECT Content.id, contentPath, contentVersion, userLogin, ' +
+    'contentDate, LENGTH(contentData) as contentBytes ' +
+    'FROM Content INNER JOIN User ON Content.contentUserId = User.id ' +
+    'ORDER BY contentPath';
+  connection.query(query, [], function (error, results, fields) {
+    const rows = [];
+    // get current file version (highest version number)
+    const versions = {};
+    for (const entry of results) {
+      if (
+        entry['contentPath'] in versions == false ||
+        versions[entry['contentPath']] < entry['contentVersion']
+      ) {
+        versions[entry['contentPath']] = entry['contentVersion'];
+      }
+    }
+    // build result list consisting of only rows with highest version number
+    for (const entry of results) {
+      if (versions[entry['contentPath']] == entry['contentVersion']) {
+        rows.push({
+          id: entry['id'],
+          path: entry['contentPath'],
+          version: entry['contentVersion'],
+          user: entry['userLogin'],
+          date: formatDate(entry['contentDate']),
+          bytes: entry['contentBytes'],
+        });
+      }
+    }
+    const data = JSON.stringify({ rows: rows });
+    response.send(data);
+    response.end();
+  });
+});
+
+app.post('/readDB_User', (request, response) => {
+  // TODO: check, if current user is allowed to do that!!
+  const query =
+    'SELECT id, userLogin, userMail, userDate, ' +
+    'userLastLogin, userAdmin ' +
+    'FROM User ORDER BY userLogin';
+  connection.query(query, [], function (error, results, fields) {
+    const rows = [];
+    // build result list
+    for (const entry of results) {
+      rows.push({
+        id: entry['id'],
+        login: entry['userLogin'],
+        mail: entry['userMail'],
+        createDate: formatDate(entry['userDate']),
+        loginDate: formatDate(entry['userLastLogin']),
+        admin: entry['userAdmin'],
+      });
+    }
+    const data = JSON.stringify({ rows: rows });
+    response.send(data);
+    response.end();
+  });
+});
+
+app.post('/readDB_Access', (request, response) => {
+  // TODO: check, if current user is allowed to do that!!
+  const query =
+    'SELECT Access.id, userLogin, accessContentPathRoot, accessRead, ' +
+    'accessWrite, accessQA, accessDate ' +
+    'FROM Access INNER JOIN User ON Access.accessUserId = User.id ' +
+    'ORDER BY userLogin';
+  connection.query(query, [], function (error, results, fields) {
+    const rows = [];
+    // build result list
+    for (const entry of results) {
+      rows.push({
+        id: entry['id'],
+        user: entry['userLogin'],
+        path: entry['accessContentPathRoot'],
+        read: entry['accessRead'],
+        write: entry['accessWrite'],
+        qa: entry['accessQA'],
+        date: formatDate(entry['accessDate']),
+      });
+    }
+    const data = JSON.stringify({ rows: rows });
+    response.send(data);
+    response.end();
+  });
+});
+
+// TODO: remove this??
 app.post('/writeCourseConfig', (request, response) => {
   const query = 'TODO';
 });
@@ -116,5 +208,21 @@ app.post('/logout', (request, response) => {
   request.session.userId = -1;
   response.end();
 });
+
+function formatDate(d) {
+  d = new Date(d);
+  let Y = '' + (d.getYear() + 1900);
+  let M = '' + (d.getMonth() + 1);
+  let D = '' + d.getDate();
+  let h = '' + d.getHours();
+  let m = '' + d.getMinutes();
+  let s = '' + d.getSeconds();
+  if (M.length < 2) M = '0' + M;
+  if (D.length < 2) D = '0' + D;
+  if (h.length < 2) h = '0' + h;
+  if (m.length < 2) m = '0' + m;
+  if (s.length < 2) s = '0' + s;
+  return Y + '-' + M + '-' + D + ' ' + h + ':' + m + ':' + s;
+}
 
 app.listen(config['port']);
