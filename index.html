@@ -76,7 +76,7 @@
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           </li>
           <li class="nav-item">
-            <a id="tab-editor" class="nav-link active" data-bs-toggle="tooltip" data-bs-placement="bottom"
+            <a id="tab-course-editor" class="nav-link active" data-bs-toggle="tooltip" data-bs-placement="bottom"
               title="edit document" style="cursor:pointer;" onclick="mathebuddyIDE.openTab('course-editor');">
               <i class="fas fa-file-alt"></i>
             </a>
@@ -161,10 +161,10 @@
       </div>
       <!-- user management submenu -->
       <div id="user-management-submenu" class="col text-center border-end border-bottom py-1" style="display: none;">
-        <button type="button" class="btn btn-outline-dark mx-0 btn-sm" data-bs-toggle="tooltip"
+        <!--<button type="button" class="btn btn-outline-dark mx-0 btn-sm" data-bs-toggle="tooltip"
           data-bs-placement="bottom" title="commit changes [Ctrl+S]" onclick="hide_tooltips();">
           <i class="fa-solid fa-floppy-disk"></i>
-        </button>
+        </button>-->
       </div>
       <!-- empty submenu -->
       <div id="empty-submenu" class="col text-center border-end border-bottom py-1" style="display: none;">
@@ -255,11 +255,181 @@
       </div>
 
       <div id="course-management" class="col m-0 p-0 border-end w-100" style="display:none;height: 100%;">
-        <textarea class="m-0 p-0 w-100" id="courseEditor" style="width: 100%;"></textarea>
+        <h2 class="mx-1">Files</h2>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Path</th>
+              <th scope="col">Version</th>
+              <th scope="col">Last Changed</th>
+              <th scope="col">Bytes</th>
+              <th scope="col">Options</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>hm1/intro</td>
+              <td>1</td>
+              <td>2022-09-13 09:29:25 / admin</td>
+              <td>42</td>
+              <td>
+                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="tooltip"
+                  data-bs-placement="top" title="rename">
+                  <i class="fa-solid fa-italic"></i>
+                </button>
+                &nbsp;
+                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="tooltip"
+                  data-bs-placement="top" title="clone">
+                  <i class="fa-regular fa-clone"></i>
+                </button>
+                &nbsp;
+                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="tooltip"
+                  data-bs-placement="top" title="delete">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>hm1/functions-intro</td>
+              <td>2</td>
+              <td>2022-09-13 09:29:25 / admin</td>
+              <td>1024</td>
+              <td>
+                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="tooltip"
+                  data-bs-placement="top" title="rename">
+                  <i class="fa-solid fa-italic"></i>
+                </button>
+                &nbsp;
+                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="tooltip"
+                  data-bs-placement="top" title="clone">
+                  <i class="fa-regular fa-clone"></i>
+                </button>
+                &nbsp;
+                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="tooltip"
+                  data-bs-placement="top" title="delete">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="text" id="exampleInputEmail1" style="width: 100%;">
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="tooltip"
+                  data-bs-placement="top" title="create">
+                  <i class="fa-solid fa-square-plus"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <div id="user-management" class="col m-0 p-0 border-end w-100" style="display:none;height: 100%;">
-        <textarea class="m-0 p-0 w-100" id="userEditor" style="width: 100%;"></textarea>
+        <h2 class="mx-1">Users</h2>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Login</th>
+              <th scope="col">Mail</th>
+              <th scope="col">Created</th>
+              <th scope="col">Last Login</th>
+              <th scope="col">Admin</th>
+              <th scope="col">Options</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>admin</td>
+              <td>admin@mathebuddy.de</td>
+              <td>2022-09-01 00:00:00</td>
+              <td>2022-09-13 09:29:25</td>
+              <td>YES</td>
+              <td>
+                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="tooltip"
+                  data-bs-placement="top" title="delete">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+                &nbsp;
+                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="tooltip"
+                  data-bs-placement="top" title="change password">
+                  <i class="fa-solid fa-key"></i>
+                </button>
+                &nbsp;
+                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="tooltip"
+                  data-bs-placement="top" title="toggle admin">
+                  <i class="fa-solid fa-crown"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <br />
+        <h2 class="mx-1">User Privileges</h2>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Login</th>
+              <th scope="col">Root Dir</th>
+              <th scope="col">Read</th>
+              <th scope="col">Write</th>
+              <th scope="col">Quality Assurance</th>
+              <th scope="col">Options</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>schwenk</td>
+              <td>hm1/</td>
+              <td>YES</td>
+              <td>YES</td>
+              <td>YES</td>
+              <td>
+                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="tooltip"
+                  data-bs-placement="top" title="toggle read access">
+                  <i class="fa-solid fa-glasses"></i>
+                </button>
+                &nbsp;
+                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="tooltip"
+                  data-bs-placement="top" title="toggle write access">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                &nbsp;
+                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="tooltip"
+                  data-bs-placement="top" title="toggle QA access">
+                  <i class="fa-solid fa-star"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>schwenk</td>
+              <td>hm2/</td>
+              <td>YES</td>
+              <td>YES</td>
+              <td>NO</td>
+              <td>
+                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="tooltip"
+                  data-bs-placement="top" title="toggle read access">
+                  <i class="fa-solid fa-glasses"></i>
+                </button>
+                &nbsp;
+                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="tooltip"
+                  data-bs-placement="top" title="toggle write access">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                &nbsp;
+                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="tooltip"
+                  data-bs-placement="top" title="toggle QA access">
+                  <i class="fa-solid fa-star"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <div class="col m-0 p-0 border-end" style="height: 100%; overflow-y: scroll; background-color: #505050;">
