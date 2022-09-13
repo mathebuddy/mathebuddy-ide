@@ -19,9 +19,17 @@ CREATE OR REPLACE TABLE Content (
 );
 
 INSERT INTO Content
-  (contentPath, contentVersion, contentData)
+  (contentPath, contentVersion, contentUserId, contentData)
   VALUES
-  ('hm1/intro.txt', 1, 'blub');
+  ('hm1/intro.txt', 1, 1, 'blub');
+INSERT INTO Content
+  (contentPath, contentVersion, contentUserId, contentData)
+  VALUES
+  ('hm1/intro.txt', 2, 1, 'blub');
+INSERT INTO Content
+  (contentPath, contentVersion, contentUserId, contentData)
+  VALUES
+  ('hm1/functions.txt', 1, 1, 'bla');
 
 /* Users */
 CREATE OR REPLACE TABLE User (
@@ -38,17 +46,30 @@ INSERT INTO User
     (userLogin, userMail, userPasswordHash, userAdmin)
     VALUES
     ('admin', '', '', 1);
+INSERT INTO User
+    (userLogin, userMail, userPasswordHash, userAdmin)
+    VALUES
+    ('schwenk', 'andreas.schwenk@th-koeln.de', '', 0);
 
 /* User privileges */
 CREATE OR REPLACE TABLE Access (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    accessUserLogin TEXT DEFAULT '',
+    accessUserId INTEGER DEFAULT 0,
     accessContentPathRoot TEXT DEFAULT '',
     accessRead BOOLEAN DEFAULT '0',
     accessWrite BOOLEAN DEFAULT '0',
     accessQA BOOLEAN DEFAULT '0',
     accessDate DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT INTO Access
+  (accessUserId, accessContentPathRoot, accessRead, accessWrite, accessQA)
+  VALUES
+  (2, 'hm1/', 1, 1, 0);
+INSERT INTO Access
+  (accessUserId, accessContentPathRoot, accessRead, accessWrite, accessQA)
+  VALUES
+  (2, 'hm2/', 1, 0, 0);
 
 /* quality assurance attributes */
 CREATE OR REPLACE TABLE QA (
