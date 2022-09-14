@@ -1,247 +1,475 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1" />
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,minimum-scale=1" />
+    <link
+      href="/node_modules/bootstrap/dist/css/bootstrap.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/node_modules/codemirror/lib/codemirror.css" />
 
-  <link href="/node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
-  <link rel="stylesheet" href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
-  <link rel="stylesheet" href="/node_modules/codemirror/lib/codemirror.css" />
+    <script src="/build/mathebuddy-ide.min.js"></script>
 
-  <script src="/build/mathebuddy-ide.min.js"></script>
+    <title>mathe:buddy IDE</title>
 
-  <title>mathe:buddy IDE</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        height: calc(100% - 46px);
+      }
 
-  <style>
-    body,
-    html {
-      margin: 0;
-      height: calc(100% - 46px);
-    }
+      body {
+        overflow: hidden;
+      }
 
-    body {
-      overflow: hidden;
-    }
+      /* visible tabs: https://github.com/codemirror/CodeMirror/blob/master/demo/visibletabs.html */
+      .cm-tab {
+        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAMCAYAAAAkuj5RAAAAAXNSR0IArs4c6QAAAGFJREFUSMft1LsRQFAQheHPowAKoACx3IgEKtaEHujDjORSgWTH/ZOdnZOcM/sgk/kFFWY0qV8foQwS4MKBCS3qR6ixBJvElOobYAtivseIE120FaowJPN75GMu8j/LfMwNjh4HUpwg4LUAAAAASUVORK5CYII=);
+        background-position: right;
+        background-repeat: no-repeat;
+      }
+    </style>
+  </head>
 
-    /* visible tabs: https://github.com/codemirror/CodeMirror/blob/master/demo/visibletabs.html */
-    .cm-tab {
-      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAMCAYAAAAkuj5RAAAAAXNSR0IArs4c6QAAAGFJREFUSMft1LsRQFAQheHPowAKoACx3IgEKtaEHujDjORSgWTH/ZOdnZOcM/sgk/kFFWY0qV8foQwS4MKBCS3qR6ixBJvElOobYAtivseIE120FaowJPN75GMu8j/LfMwNjh4HUpwg4LUAAAAASUVORK5CYII=);
-      background-position: right;
-      background-repeat: no-repeat;
-    }
-  </style>
-</head>
-
-<body>
-
-  <!-- MAIN MENU -->
-  <div class="container-fluid m-0 p-0 bg-dark">
-    <div class="row my-0">
-      <div class="col my-1">
-      </div>
-    </div>
-    <div class="row m-0 p-0 w-100">
-      <div class="col m-0 p-0 w-100">
-        <ul class="nav nav-tabs m-0 p-0 w-100 bg-dark">
-          <li class="nav-item">
-            &nbsp;&nbsp;
-          </li>
-          <li class="nav-item">
-            <span data-bs-toggle="modal" data-bs-target="#modal-login">
-              <button id="login" type="button" class="btn btn-success mx-0 btn-sm" data-bs-toggle="tooltip"
-                data-bs-placement="bottom" title="login">
-                <i class="fas fa-sign-in-alt"></i>
-              </button>
-            </span>
-          </li>
-          <li class="nav-item">
-            <button id="logout" type="button" class="btn btn-danger mx-1 btn-sm" data-bs-toggle="tooltip"
-              data-bs-placement="bottom" title="logout" onclick="window.location.href='services/logout.php';">
-              <i class="fas fa-sign-out-alt"></i>
+  <body>
+    <!-- MODALS (popup menus) -->
+    <div id="text-input-modal" class="modal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 id="text-input-modal-title" class="modal-title">TITLE</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              <span id="text-input-modal-text">TEXT</span>
+              <input
+                id="text-input-modal-input"
+                type="text"
+                class="form-control"
+                id="exampleInputEmail1"
+              />
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="document.getElementById('text-input-modal').style.display = 'none';"
+              data-bs-dismiss="modal"
+            >
+              Cancel
             </button>
-          </li>
-          <li class="nav-item">
-            &nbsp;&nbsp;&nbsp;&nbsp;
-          </li>
-          <li class="nav-item">
-            <a class="btn btn-dark text-primary" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="bottom"
-              title='help' style="cursor:pointer;" href="https://app.f07-its.fh-koeln.de/docs/build/index.html"
-              target="_blank">
-              <i class="fa-regular fa-circle-question h4"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          </li>
-          <li class="nav-item">
-            <a id="tab-course-editor" class="nav-link active" data-bs-toggle="tooltip" data-bs-placement="bottom"
-              title="edit document" style="cursor:pointer;" onclick="mathebuddyIDE.openTab('course-editor');">
-              <i class="fas fa-file-alt h5"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a id="tab-course-management" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="bottom"
-              title="course management" style="cursor:pointer;" onclick="mathebuddyIDE.openTab('course-management');">
-              <i class="fa-solid fa-sitemap h5"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a id="tab-user-management" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="bottom"
-              title="user management" style="cursor:pointer;" onclick="mathebuddyIDE.openTab('user-management');">
-              <i class="fas fa-user h5"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="col m-0 p-0 text-end border-bottom text-secondary">
-        <span class="lead fw-lighter" style="cursor:default;">
-          mathe:buddy IDE &nbsp;
-          <img src="/img/logo.svg" style="height:32px;" />
-        </span>&nbsp;&nbsp;&nbsp;&nbsp;
-      </div>
-    </div>
-  </div>
-
-  <!-- SUB MENU -->
-  <div id="container" class="container-fluid p-0 m-0">
-    <div class="row m-0 p-0">
-      <!-- course editor submenu -->
-      <div id="course-editor-submenu" class="col text-center border-end border-bottom py-1">
-
-        <span class="text-primary"><i class="fas fa-layer-group"></i></span>
-        <div class="dropdown" style="display:inline-block" data-bs-toggle="tooltip" data-bs-placement="top"
-          title="course selection">
-          <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="courselist_button"
-            data-bs-toggle="dropdown" onclick="hide_tooltips();">
-          </button>
-          <ul id="courselist_dropdown_items" class="dropdown-menu">
-          </ul>
-        </div>
-        &nbsp;&nbsp;&nbsp;
-        <span class="text-primary"><i class="fas fa-file"></i></span>
-        <div class="dropdown" style="display:inline-block" data-bs-toggle="tooltip" data-bs-placement="top"
-          title="document selection">
-          <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="filelist_button"
-            data-bs-toggle="dropdown" onclick="hide_tooltips();">
-          </button>
-          <ul id="filelist_dropdown_items" class="dropdown-menu">
-          </ul>
-        </div>
-
-        &nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;
-
-        <span data-bs-toggle="modal" data-bs-target="#insertCodeModal">
-          <button id="insertCodeButton" type="button" class="btn btn-outline-dark mx-0 btn-sm" data-bs-toggle="tooltip"
-            data-bs-placement="bottom" title="insert template [F3]">
-            <i class="fas fa-pencil-alt"></i>
-          </button>
-        </span>
-        <div class="dropdown" style="display:inline-block" data-bs-toggle="tooltip" data-bs-placement="bottom"
-          title="insert math symbol">
-          <button class="btn btn-sm btn-outline-dark dropdown-toggle" type="button" id="" data-bs-toggle="dropdown"
-            onclick="hide_tooltips();">
-            &Sigma;
-          </button>
-          <div class="dropdown-menu">
-            <div id="math-symbols" class="yamm-content">
-            </div>
+            <button
+              id="text-input-modal-button"
+              type="button"
+              class="btn btn-primary"
+            >
+              Submit
+            </button>
           </div>
         </div>
-        <button type="button" class="btn btn-outline-dark mx-0 btn-sm" data-bs-toggle="tooltip"
-          data-bs-placement="bottom" title="undo [Ctrl+Z]" onclick="hide_tooltips();slwEditor.undoEditor();">
-          <i class="fas fa-undo"></i>
-        </button>
-        <button type="button" class="btn btn-outline-dark mx-0 btn-sm" data-bs-toggle="tooltip"
-          data-bs-placement="bottom" title="redo [Ctrl+Y]" onclick="hide_tooltips();slwEditor.redoEditor();">
-          <i class="fas fa-redo"></i>
-        </button>
-        <button type="button" class="btn btn-outline-dark mx-0 btn-sm" data-bs-toggle="tooltip"
-          data-bs-placement="bottom" title="save [Ctrl+S]" onclick="hide_tooltips();slwEditor.saveDocument();">
-          <i class="fas fa-hdd"></i>
-        </button>
-
-        &nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;
-
-        <button type="button" class="btn btn-outline-success mx-0 btn-sm" data-bs-toggle="tooltip"
-          data-bs-placement="bottom" title="fast update [F1]" onclick="hide_tooltips();slwEditor.updateEmulator(true);">
-          <i class="fa-solid fa-forward-fast"></i>
-        </button>
-        <button type="button" class="btn btn-outline-success mx-0 btn-sm" data-bs-toggle="tooltip"
-          data-bs-placement="bottom" title="full update [F2]"
-          onclick="hide_tooltips();slwEditor.updateEmulator(false);">
-          <i class="fa-solid fa-play"></i>
-        </button>
-
-        &nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;
-
-        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-          <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-          <label class="btn btn-outline-primary btn-sm" for="btnradio1" data-bs-toggle="tooltip"
-            data-bs-placement="bottom" title="desktop preview" onclick="slwEditor.setDesktopMode();">
-            <i class="fa-solid fa-desktop"></i>
-          </label>
-          <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-          <label class="btn btn-outline-primary btn-sm" for="btnradio2" data-bs-toggle="tooltip"
-            data-bs-placement="bottom" title="mobile preview" onclick="slwEditor.setMobileMode();">
-            &nbsp;<i class="fa-solid fa-mobile-screen-button"></i>&nbsp;
-          </label>
-          <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-          <label class="btn btn-outline-primary btn-sm" for="btnradio3" data-bs-toggle="tooltip"
-            data-bs-placement="bottom" title="version management" onclick="">
-            &nbsp;<i class="fa-solid fa-code-compare"></i>&nbsp;
-          </label>
-        </div>
-
       </div>
-      <!-- user management submenu -->
-      <div id="user-management-submenu" class="col text-center border-end border-bottom py-1" style="display: none;">
-        <!--<button type="button" class="btn btn-outline-dark mx-0 btn-sm" data-bs-toggle="tooltip"
+    </div>
+
+    <!-- MAIN MENU -->
+    <div class="container-fluid m-0 p-0 bg-dark">
+      <div class="row my-0">
+        <div class="col my-1"></div>
+      </div>
+      <div class="row m-0 p-0 w-100">
+        <div class="col m-0 p-0 w-100">
+          <ul class="nav nav-tabs m-0 p-0 w-100 bg-dark">
+            <li class="nav-item">&nbsp;&nbsp;</li>
+            <li class="nav-item">
+              <span data-bs-toggle="modal" data-bs-target="#modal-login">
+                <button
+                  id="login"
+                  type="button"
+                  class="btn btn-success mx-0 btn-sm"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="login"
+                >
+                  <i class="fas fa-sign-in-alt"></i>
+                </button>
+              </span>
+            </li>
+            <li class="nav-item">
+              <button
+                id="logout"
+                type="button"
+                class="btn btn-danger mx-1 btn-sm"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="logout"
+                onclick="window.location.href='services/logout.php';"
+              >
+                <i class="fas fa-sign-out-alt"></i>
+              </button>
+            </li>
+            <li class="nav-item">&nbsp;&nbsp;&nbsp;&nbsp;</li>
+            <li class="nav-item">
+              <a
+                class="btn btn-dark text-primary"
+                data-bs-toggle="tooltip"
+                data-bs-html="true"
+                data-bs-placement="bottom"
+                title="help"
+                style="cursor: pointer"
+                href="https://app.f07-its.fh-koeln.de/docs/build/index.html"
+                target="_blank"
+              >
+                <i class="fa-regular fa-circle-question h4"></i>
+              </a>
+            </li>
+            <li class="nav-item">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+            <li class="nav-item">
+              <a
+                id="tab-course-editor"
+                class="nav-link active"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="edit document"
+                style="cursor: pointer"
+                onclick="mathebuddyIDE.openTab('course-editor');"
+              >
+                <i class="fas fa-file-alt h5"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                id="tab-course-management"
+                class="nav-link"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="course management"
+                style="cursor: pointer"
+                onclick="mathebuddyIDE.openTab('course-management');"
+              >
+                <i class="fa-solid fa-sitemap h5"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                id="tab-user-management"
+                class="nav-link"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="user management"
+                style="cursor: pointer"
+                onclick="mathebuddyIDE.openTab('user-management');"
+              >
+                <i class="fas fa-user h5"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col m-0 p-0 text-end border-bottom text-secondary">
+          <span class="lead fw-lighter" style="cursor: default">
+            mathe:buddy IDE &nbsp;
+            <img src="/img/logo.svg" style="height: 32px" /> </span
+          >&nbsp;&nbsp;&nbsp;&nbsp;
+        </div>
+      </div>
+    </div>
+
+    <!-- SUB MENU -->
+    <div id="container" class="container-fluid p-0 m-0">
+      <div class="row m-0 p-0">
+        <!-- course editor submenu -->
+        <div
+          id="course-editor-submenu"
+          class="col text-center border-end border-bottom py-1"
+        >
+          <span class="text-primary"><i class="fas fa-layer-group"></i></span>
+          <div
+            class="dropdown"
+            style="display: inline-block"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="course selection"
+          >
+            <button
+              class="btn btn-sm btn-primary dropdown-toggle"
+              type="button"
+              id="courselist_button"
+              data-bs-toggle="dropdown"
+              onclick="hide_tooltips();"
+            ></button>
+            <ul id="courselist_dropdown_items" class="dropdown-menu"></ul>
+          </div>
+          &nbsp;&nbsp;&nbsp;
+          <span class="text-primary"><i class="fas fa-file"></i></span>
+          <div
+            class="dropdown"
+            style="display: inline-block"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="document selection"
+          >
+            <button
+              class="btn btn-sm btn-primary dropdown-toggle"
+              type="button"
+              id="filelist_button"
+              data-bs-toggle="dropdown"
+              onclick="hide_tooltips();"
+            ></button>
+            <ul id="filelist_dropdown_items" class="dropdown-menu"></ul>
+          </div>
+
+          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+
+          <span data-bs-toggle="modal" data-bs-target="#insertCodeModal">
+            <button
+              id="insertCodeButton"
+              type="button"
+              class="btn btn-outline-dark mx-0 btn-sm"
+              data-bs-toggle="tooltip"
+              data-bs-placement="bottom"
+              title="insert template [F3]"
+            >
+              <i class="fas fa-pencil-alt"></i>
+            </button>
+          </span>
+          <div
+            class="dropdown"
+            style="display: inline-block"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="insert math symbol"
+          >
+            <button
+              class="btn btn-sm btn-outline-dark dropdown-toggle"
+              type="button"
+              id=""
+              data-bs-toggle="dropdown"
+              onclick="hide_tooltips();"
+            >
+              &Sigma;
+            </button>
+            <div class="dropdown-menu">
+              <div id="math-symbols" class="yamm-content"></div>
+            </div>
+          </div>
+          <button
+            type="button"
+            class="btn btn-outline-dark mx-0 btn-sm"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="undo [Ctrl+Z]"
+            onclick="hide_tooltips();slwEditor.undoEditor();"
+          >
+            <i class="fas fa-undo"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-dark mx-0 btn-sm"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="redo [Ctrl+Y]"
+            onclick="hide_tooltips();slwEditor.redoEditor();"
+          >
+            <i class="fas fa-redo"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-dark mx-0 btn-sm"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="save [Ctrl+S]"
+            onclick="hide_tooltips();slwEditor.saveDocument();"
+          >
+            <i class="fas fa-hdd"></i>
+          </button>
+
+          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+
+          <button
+            type="button"
+            class="btn btn-outline-success mx-0 btn-sm"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="fast update [F1]"
+            onclick="hide_tooltips();slwEditor.updateEmulator(true);"
+          >
+            <i class="fa-solid fa-forward-fast"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-success mx-0 btn-sm"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="full update [F2]"
+            onclick="hide_tooltips();slwEditor.updateEmulator(false);"
+          >
+            <i class="fa-solid fa-play"></i>
+          </button>
+
+          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+
+          <div
+            class="btn-group"
+            role="group"
+            aria-label="Basic radio toggle button group"
+          >
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="btnradio1"
+              autocomplete="off"
+              checked
+            />
+            <label
+              class="btn btn-outline-primary btn-sm"
+              for="btnradio1"
+              data-bs-toggle="tooltip"
+              data-bs-placement="bottom"
+              title="desktop preview"
+              onclick="slwEditor.setDesktopMode();"
+            >
+              <i class="fa-solid fa-desktop"></i>
+            </label>
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="btnradio2"
+              autocomplete="off"
+            />
+            <label
+              class="btn btn-outline-primary btn-sm"
+              for="btnradio2"
+              data-bs-toggle="tooltip"
+              data-bs-placement="bottom"
+              title="mobile preview"
+              onclick="slwEditor.setMobileMode();"
+            >
+              &nbsp;<i class="fa-solid fa-mobile-screen-button"></i>&nbsp;
+            </label>
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="btnradio3"
+              autocomplete="off"
+            />
+            <label
+              class="btn btn-outline-primary btn-sm"
+              for="btnradio3"
+              data-bs-toggle="tooltip"
+              data-bs-placement="bottom"
+              title="version management"
+              onclick=""
+            >
+              &nbsp;<i class="fa-solid fa-code-compare"></i>&nbsp;
+            </label>
+          </div>
+        </div>
+        <!-- user management submenu -->
+        <div
+          id="user-management-submenu"
+          class="col text-center border-end border-bottom py-1"
+          style="display: none"
+        >
+          <!--<button type="button" class="btn btn-outline-dark mx-0 btn-sm" data-bs-toggle="tooltip"
           data-bs-placement="bottom" title="commit changes [Ctrl+S]" onclick="hide_tooltips();">
           <i class="fa-solid fa-floppy-disk"></i>
         </button>-->
-      </div>
-      <!-- empty submenu -->
-      <div id="empty-submenu" class="col text-center border-end border-bottom py-1" style="display: none;">
-      </div>
-      <!-- preview submenu -->
-      <div id="preview-submenu" class="col text-center border-end border-bottom py-1">
-
-        &nbsp;&nbsp;&nbsp;
-        <button id="preview-spell-check" type="button" class="btn btn-outline-dark mx-0 btn-sm" data-bs-toggle="tooltip"
-          data-bs-placement="bottom" title="spell check"
-          onclick="hide_tooltips();slwEditor.toggleButton('preview-spell-check');">
-          <i class="fas fa-spell-check"></i>
-        </button>
-        <button id="preview-show-source-links" type="button" class="btn btn-outline-dark mx-0 btn-sm"
-          data-bs-toggle="tooltip" data-bs-placement="bottom" title="source links"
-          onclick="hide_tooltips();slwEditor.toggleButton('preview-show-source-links');">
-          <i class="fas fa-link"></i>
-        </button>
-        <button id="preview-show-solutions" type="button" class="btn btn-outline-dark mx-0 btn-sm"
-          data-bs-toggle="tooltip" data-bs-placement="bottom" title="show solutions"
-          onclick="hide_tooltips();slwEditor.toggleButton('preview-show-solutions');">
-          <i class="fas fa-poll"></i>
-        </button>
-        <button id="preview-show-variables" type="button" class="btn btn-outline-dark mx-0 btn-sm"
-          data-bs-toggle="tooltip" data-bs-placement="bottom" title="show variables"
-          onclick="hide_tooltips();slwEditor.toggleButton('preview-show-variables');">
-          &nbsp;<i class="fa-solid fa-info"></i>&nbsp;
-        </button>
-        <button id="preview-show-score" type="button" class="btn btn-outline-dark mx-0 btn-sm" data-bs-toggle="tooltip"
-          data-bs-placement="bottom" title="show scoring"
-          onclick="hide_tooltips();slwEditor.toggleButton('preview-show-score');">
-          &nbsp;<i class="fa-solid fa-check-double"></i>&nbsp;
-        </button>
-        <button id="preview-show-export" type="button" class="btn btn-outline-dark mx-0 btn-sm" data-bs-toggle="tooltip"
-          data-bs-placement="bottom" title="show 'export' buttons"
-          onclick="hide_tooltips();slwEditor.toggleButton('preview-show-export');">
-          <i class="fas fa-file-export"></i>
-        </button>
-        <!--&nbsp;&nbsp;&nbsp;
+        </div>
+        <!-- empty submenu -->
+        <div
+          id="empty-submenu"
+          class="col text-center border-end border-bottom py-1"
+          style="display: none"
+        ></div>
+        <!-- preview submenu -->
+        <div
+          id="preview-submenu"
+          class="col text-center border-end border-bottom py-1"
+        >
+          &nbsp;&nbsp;&nbsp;
+          <button
+            id="preview-spell-check"
+            type="button"
+            class="btn btn-outline-dark mx-0 btn-sm"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="spell check"
+            onclick="hide_tooltips();slwEditor.toggleButton('preview-spell-check');"
+          >
+            <i class="fas fa-spell-check"></i>
+          </button>
+          <button
+            id="preview-show-source-links"
+            type="button"
+            class="btn btn-outline-dark mx-0 btn-sm"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="source links"
+            onclick="hide_tooltips();slwEditor.toggleButton('preview-show-source-links');"
+          >
+            <i class="fas fa-link"></i>
+          </button>
+          <button
+            id="preview-show-solutions"
+            type="button"
+            class="btn btn-outline-dark mx-0 btn-sm"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="show solutions"
+            onclick="hide_tooltips();slwEditor.toggleButton('preview-show-solutions');"
+          >
+            <i class="fas fa-poll"></i>
+          </button>
+          <button
+            id="preview-show-variables"
+            type="button"
+            class="btn btn-outline-dark mx-0 btn-sm"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="show variables"
+            onclick="hide_tooltips();slwEditor.toggleButton('preview-show-variables');"
+          >
+            &nbsp;<i class="fa-solid fa-info"></i>&nbsp;
+          </button>
+          <button
+            id="preview-show-score"
+            type="button"
+            class="btn btn-outline-dark mx-0 btn-sm"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="show scoring"
+            onclick="hide_tooltips();slwEditor.toggleButton('preview-show-score');"
+          >
+            &nbsp;<i class="fa-solid fa-check-double"></i>&nbsp;
+          </button>
+          <button
+            id="preview-show-export"
+            type="button"
+            class="btn btn-outline-dark mx-0 btn-sm"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="show 'export' buttons"
+            onclick="hide_tooltips();slwEditor.toggleButton('preview-show-export');"
+          >
+            <i class="fas fa-file-export"></i>
+          </button>
+          <!--&nbsp;&nbsp;&nbsp;
         <span class="text-danger"><i class="fa-solid fa-database"></i></span>
         <div class="dropdown" style="display:inline-block" data-bs-toggle="tooltip" data-bs-placement="bottom"
           title="server selection">
@@ -259,46 +487,58 @@
           title="visit selected server [F11]" onclick="hide_tooltips();slwEditor.visitServer();">
           <i class="fa-solid fa-arrow-up-right-from-square"></i>
         </button>-->
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- WORKING AREA -->
-  <div id="container" class="container-fluid p-0 m-0" style="height:100%;">
-    <div class="row m-0 p-0" style="height:100%;">
+    <!-- WORKING AREA -->
+    <div id="container" class="container-fluid p-0 m-0" style="height: 100%">
+      <div class="row m-0 p-0" style="height: 100%">
+        <div
+          id="course-editor"
+          class="col m-0 p-0 border-end w-100"
+          style="height: 100%"
+        >
+          <textarea
+            class="m-0 p-0 w-100"
+            id="editor"
+            style="width: 100%"
+          ></textarea>
+        </div>
 
-      <div id="course-editor" class="col m-0 p-0 border-end w-100" style="height: 100%;">
-        <textarea class="m-0 p-0 w-100" id="editor" style="width: 100%;"></textarea>
+        <div
+          id="course-management"
+          class="col m-0 p-0 border-end w-100"
+          style="display: none; height: 100%; overflow-y: scroll"
+        >
+          <h2 class="mx-1">Files</h2>
+          <div id="course-management-table"></div>
+        </div>
+
+        <div
+          id="user-management"
+          class="col m-0 p-0 border-end w-100"
+          style="display: none; height: 100%; overflow-y: scroll"
+        >
+          <h2 class="mx-1">Users</h2>
+          <div id="user-management-table"></div>
+          <br />
+          <h2 class="mx-1">User Privileges</h2>
+          <div id="user-privileges-table"></div>
+        </div>
+
+        <div
+          class="col m-0 p-0 border-end"
+          style="height: 100%; overflow-y: scroll; background-color: #505050"
+        >
+          <div id="rendered-content" class="col p-2"></div>
+        </div>
       </div>
-
-      <div id="course-management" class="col m-0 p-0 border-end w-100"
-        style="display:none;height: 100%; overflow-y: scroll;">
-        <h2 class="mx-1">Files</h2>
-        <div id="course-management-table"></div>
-      </div>
-
-      <div id="user-management" class="col m-0 p-0 border-end w-100"
-        style="display:none;height: 100%; overflow-y: scroll;">
-        <h2 class="mx-1">Users</h2>
-        <div id="user-management-table"></div>
-        <br />
-        <h2 class="mx-1">User Privileges</h2>
-        <div id="user-privileges-table"></div>
-      </div>
-
-      <div class="col m-0 p-0 border-end" style="height: 100%; overflow-y: scroll; background-color: #505050;">
-        <div id="rendered-content" class="col p-2"></div>
-      </div>
-
     </div>
-  </div>
 
-  <script>
-    mathebuddyIDE.init();
-
-    mathebuddyIDE.showTooltips();
-  </script>
-
-</body>
-
+    <script>
+      mathebuddyIDE.init();
+      mathebuddyIDE.showTooltips();
+    </script>
+  </body>
 </html>
