@@ -11,6 +11,92 @@ import { closeTextInputModal, openTextInputModal } from '.';
 
 import { Table } from './table';
 
+let selectedCourse = '';
+let selectedFile = '';
+
+export function selectCourse(courseName: string): void {
+  selectedCourse = courseName;
+  const button = document.getElementById('courselist_button');
+  button.innerHTML = courseName;
+  refreshFileList(selectedCourse);
+}
+
+export function selectFile(fileName: string): void {
+  selectedFile = fileName;
+  const button = document.getElementById('filelist_button');
+  button.innerHTML = fileName;
+  // load file
+  axios
+    .post(
+      '/selectDB_ReadFile',
+      new URLSearchParams({ path: selectedCourse + '/' + selectedFile }),
+    )
+    .then(function (response) {
+      console.log(response.data['fileVersions']);
+      // TODO: implmenetation
+      alert('TODO: implement content.ts line 37ff');
+    })
+    .catch(function (error) {
+      // TODO
+      console.error('ERROR!!' + error);
+    });
+}
+
+export function refreshCourseList(): void {
+  axios
+    .post('/selectDB_Courses', new URLSearchParams({}))
+    .then(function (response) {
+      // console.log(response.data['courses']);
+      const ul = document.getElementById('courselist_dropdown_items');
+      ul.innerHTML = '';
+      for (const course of response.data['courses']) {
+        const li = document.createElement('li');
+        ul.appendChild(li);
+        const a = document.createElement('a');
+        li.appendChild(a);
+        a.classList.add('dropdown-item');
+        a.style.cursor = 'pointer';
+        a.innerHTML = course;
+        a.onclick = function (): void {
+          selectCourse(course);
+        };
+      }
+    })
+    .catch(function (error) {
+      // TODO
+      console.error('ERROR!!' + error);
+    });
+}
+
+export function refreshFileList(courseName: string): void {
+  axios
+    .post(
+      '/selectDB_CourseFiles',
+      new URLSearchParams({ courseName: courseName }),
+    )
+    .then(function (response) {
+      // console.log(response.data['courses']);
+      const ul = document.getElementById('filelist_dropdown_items');
+      ul.innerHTML = '';
+      for (const file of response.data['files']) {
+        const li = document.createElement('li');
+        ul.appendChild(li);
+        const a = document.createElement('a');
+        li.appendChild(a);
+        a.classList.add('dropdown-item');
+        a.style.cursor = 'pointer';
+        a.innerHTML = file;
+        a.onclick = function (): void {
+          selectFile(file);
+        };
+      }
+    })
+    .catch(function (error) {
+      // TODO
+      console.error('ERROR!!' + error);
+    });
+}
+
 export function refreshContent(): void {
   axios
     .post('/selectDB_Content', new URLSearchParams({}))
@@ -38,7 +124,7 @@ export function refreshContent(): void {
               const path = i.value;
               axios
                 .post(
-                  'updateDB_ContentPath',
+                  '/updateDB_ContentPath',
                   new URLSearchParams({ id: '' + id, path: path }),
                 )
                 .then(function (response) {
@@ -86,7 +172,7 @@ export function refreshContent(): void {
           ).value;
           //console.log('create file ' + path);
           axios
-            .post('insertDB_Content', new URLSearchParams({ path: path }))
+            .post('/insertDB_Content', new URLSearchParams({ path: path }))
             .then(function (response) {
               console.log(response.data);
               if (response.data === 'OK') {
