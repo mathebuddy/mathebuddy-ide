@@ -104,7 +104,7 @@ let z = x + y;
 Calculate $ x + y = #z $.
 ---
 `);
-  editor.setSize(null, '100%');
+  editor.setSize(null, '90%'); // TODO
 }
 
 export function openTab(id: string): void {
@@ -176,3 +176,5 @@ export function openTextInputModal(
 export function closeTextInputModal(): void {
   document.getElementById('text-input-modal').style.display = 'none';
 }
+
+export { saveFile } from './content';
