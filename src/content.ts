@@ -7,12 +7,44 @@
  */
 
 import axios from 'axios';
-import { closeTextInputModal, openTextInputModal } from '.';
+import {
+  closeTextInputModal,
+  editor,
+  hideTooltips,
+  openTextInputModal,
+} from '.';
 
 import { Table } from './table';
 
 let selectedCourse = '';
 let selectedFile = '';
+
+export function saveFile(): void {
+  TODO: server-handler must store correct version number; must update file status row;
+
+  hideTooltips();
+  if (selectCourse.length == 0 || selectFile.length == 0) {
+    // TODO: error message
+    return;
+  }
+  const text = editor.getValue();
+  axios
+    .post(
+      '/selectDB_SaveFile',
+      new URLSearchParams({
+        path: selectedCourse + '/' + selectedFile,
+        text: text,
+      }),
+    )
+    .then(function (response) {
+      console.log(response);
+      // TODO: provess response
+    })
+    .catch(function (error) {
+      // TODO
+      console.error('ERROR!!' + error);
+    });
+}
 
 export function selectCourse(courseName: string): void {
   selectedCourse = courseName;
@@ -32,9 +64,18 @@ export function selectFile(fileName: string): void {
       new URLSearchParams({ path: selectedCourse + '/' + selectedFile }),
     )
     .then(function (response) {
-      console.log(response.data['fileVersions']);
-      // TODO: implmenetation
-      alert('TODO: implement content.ts line 37ff');
+      const fileVersions = response.data['fileVersions'];
+      const lastVersion = fileVersions[fileVersions.length - 1];
+      const path = lastVersion['path'];
+      const user = lastVersion['user'];
+      const version = lastVersion['version'];
+      const date = lastVersion['date'];
+      const text = lastVersion['text'];
+      document.getElementById('course-editor-file-status').innerHTML =
+        path + ' &bull; v' + version + ' &bull; ' + user + ' &bull; ' + date;
+      // TODO: old document might be unsaved!
+      editor.setValue(text);
+      editor.focus();
     })
     .catch(function (error) {
       // TODO
