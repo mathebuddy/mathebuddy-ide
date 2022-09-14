@@ -14,10 +14,17 @@ TODO
 
 ```bash
 sudo apt install mariadb
-mysql_secure_installation
+sudo mysql_secure_installation
 ```
 
 As the current root password is empty, skip by pressing [ENTER]. Then set the new root password. Remove the anonymous user and disallow a remote login for the root user. Optionally, remove the test database. Finally reload the privileges tables.
+
+In macOS you can use [Homebrew](https://brew.sh) as package manager
+
+```bash
+brew install mariadb
+brew services start mariadb
+```
 
 ### Create the Database
 
@@ -30,7 +37,7 @@ CREATE DATABASE mathebuddy;
 Create tables with file `database/init.sql` from this repository:
 
 ```bash
-mariadb < database/init.sql
+sudo mariadb < database/init.sql
 ```
 
 Create database user and set privileges:
