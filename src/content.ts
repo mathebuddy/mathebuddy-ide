@@ -7,12 +7,13 @@
  */
 
 import axios from 'axios';
+import { closeTextInputModal, openTextInputModal } from '.';
 
 import { Table } from './table';
 
 export function refreshContent(): void {
   axios
-    .post('/readDB_Content', new URLSearchParams({}))
+    .post('/selectDB_Content', new URLSearchParams({}))
     .then(function (response) {
       const table = new Table();
       table.addHeadline('Path');
@@ -24,13 +25,46 @@ export function refreshContent(): void {
         '<i class="fa-solid fa-italic"></i>',
         'rename',
         function (id: number): void {
+          table.setLogHTML('');
           console.log('rename ' + id);
+          openTextInputModal(
+            'Change Path Name',
+            'new path name:',
+            function (): void {
+              console.log('clicked ...');
+              const i = document.getElementById(
+                'text-input-modal-input',
+              ) as HTMLInputElement;
+              const path = i.value;
+              axios
+                .post(
+                  'updateDB_ContentPath',
+                  new URLSearchParams({ id: '' + id, path: path }),
+                )
+                .then(function (response) {
+                  console.log(response.data);
+                  if (response.data === 'OK') {
+                    closeTextInputModal();
+                    refreshContent();
+                  } else {
+                    table.setLogHTML(
+                      '<span class="text-danger">' + response.data + '</span>',
+                    );
+                  }
+                })
+                .catch(function (error) {
+                  // TODO
+                  console.error('ERROR!!' + error);
+                });
+            },
+          );
         },
       );
       table.addRowButton(
         '<i class="fa-regular fa-clone"></i>',
         'clone',
         function (id: number): void {
+          table.setLogHTML('');
           console.log('clone ' + id);
         },
       );
@@ -38,6 +72,7 @@ export function refreshContent(): void {
         '<i class="fa-solid fa-trash-can"></i>',
         'delete',
         function (id: number): void {
+          table.setLogHTML('');
           console.log('delete ' + id);
         },
       );
@@ -45,13 +80,13 @@ export function refreshContent(): void {
         '<i class="fa-solid fa-square-plus"></i>',
         'create',
         function (): void {
-          // TODO: check, if path is valid!! COURSE/FILE
+          table.setLogHTML('');
           const path = (
             document.getElementById('create_content_0') as HTMLInputElement
           ).value;
-          console.log('create file ' + path);
+          //console.log('create file ' + path);
           axios
-            .post('writeDB_Content', new URLSearchParams({ path: path }))
+            .post('insertDB_Content', new URLSearchParams({ path: path }))
             .then(function (response) {
               console.log(response.data);
               if (response.data === 'OK') {

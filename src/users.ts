@@ -12,7 +12,7 @@ import { Table } from './table';
 
 export function refreshUsers(): void {
   axios
-    .post('/readDB_User', new URLSearchParams({}))
+    .post('/selectDB_User', new URLSearchParams({}))
     .then(function (response) {
       const table = new Table();
       table.addHeadline('Login');
@@ -66,7 +66,7 @@ export function refreshUsers(): void {
 
 function refreshUserPrivileges(): void {
   axios
-    .post('/readDB_Access', new URLSearchParams({}))
+    .post('/selectDB_Access', new URLSearchParams({}))
     .then(function (response) {
       const table = new Table();
       table.addHeadline('Login');

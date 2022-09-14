@@ -154,3 +154,22 @@ import * as diff from 'diff';
 const a = 'blubxxx\n1\n2\n3';
 const b = 'blxubxx\n1\n2\n4';
 console.log(diff.diffLines(a, b));
+
+export function openTextInputModal(
+  title: string,
+  text: string,
+  fun: () => void,
+): void {
+  document.getElementById('text-input-modal-title').innerHTML = title;
+  document.getElementById('text-input-modal-text').innerHTML = text;
+  document.getElementById('text-input-modal-button').onclick = fun;
+  const i = document.getElementById(
+    'text-input-modal-input',
+  ) as HTMLInputElement;
+  i.value = '';
+  document.getElementById('text-input-modal').style.display = 'block';
+}
+
+export function closeTextInputModal(): void {
+  document.getElementById('text-input-modal').style.display = 'none';
+}

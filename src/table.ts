@@ -53,6 +53,11 @@ export class Table {
 
   public populateDOM(e: HTMLElement): void {
     e.innerHTML = '';
+    // log
+    this.logDiv = document.createElement('div');
+    this.logDiv.classList.add('mx-2');
+    e.appendChild(this.logDiv);
+    // table
     const table = document.createElement('table');
     e.appendChild(table);
     table.classList.add('table', 'table-striped');
@@ -116,10 +121,6 @@ export class Table {
         td.appendChild(separator);
       }
     }
-    // log
-    this.logDiv = document.createElement('div');
-    this.logDiv.classList.add('mx-2');
-    e.appendChild(this.logDiv);
   }
 }
 
