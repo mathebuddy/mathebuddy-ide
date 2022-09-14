@@ -7,7 +7,6 @@
  */
 
 import axios from 'axios';
-import { showTooltips } from '.';
 
 import { Table } from './table';
 
@@ -104,6 +103,7 @@ function refreshUserPrivileges(): void {
           console.log('create ');
         },
       );
+      table.addInputRow(2, 'create_privilege_item');
       const rows = response.data['rows'];
       for (const row of rows) {
         table.addRow(
@@ -117,7 +117,6 @@ function refreshUserPrivileges(): void {
           row['id'],
         );
       }
-      table.addInputRow(2, 'create_privilege_item');
       table.populateDOM(document.getElementById('user-privileges-table'));
       //showTooltips();
     })
