@@ -21,15 +21,15 @@ CREATE OR REPLACE TABLE Content (
 INSERT INTO Content
   (contentPath, contentVersion, contentUserId, contentData)
   VALUES
-  ('hm1/intro.txt', 1, 1, 'blub');
+  ('hm1/intro', 1, 1, 'blub');
 INSERT INTO Content
   (contentPath, contentVersion, contentUserId, contentData)
   VALUES
-  ('hm1/intro.txt', 2, 1, 'blub');
+  ('hm1/intro', 2, 1, 'blub');
 INSERT INTO Content
   (contentPath, contentVersion, contentUserId, contentData)
   VALUES
-  ('hm1/functions.txt', 1, 1, 'bla');
+  ('hm1/functions', 1, 1, 'bla');
 
 /* Users */
 CREATE OR REPLACE TABLE User (
@@ -74,7 +74,7 @@ INSERT INTO Access
 /* quality assurance attributes */
 CREATE OR REPLACE TABLE QA (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    qaContentPath TEXT DEFAULT '',
+    qaContentPath TEXT DEFAULT '', -- TODO: this is currently NOT updated when path of Content is changed!
     qaAttribute TEXT DEFAULT ''
 );
 
