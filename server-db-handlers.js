@@ -108,9 +108,9 @@ module.exports.initDatabaseHandlers = function (app, connection) {
     // TODO: only get content files with read access for current user
     let path = mysql.escape(request.body.path);
     const query =
-      'SELECT contentPath, contentVersion, contentUserId, contentData, ' +
+      'SELECT contentPath, contentVersion, userLogin, contentData, ' +
       'contentDate ' +
-      'FROM Content ' +
+      'FROM Content INNER JOIN User ON Content.contentUserId = User.id ' +
       'WHERE contentPath=' +
       path +
       ' ' +
@@ -124,13 +124,40 @@ module.exports.initDatabaseHandlers = function (app, connection) {
         fileVersions.push({
           path: entry['contentPath'],
           version: entry['contentVersion'],
-          userId: entry['contentUserId'],
-          data: entry['contentData'],
+          user: entry['userLogin'],
+          text: entry['contentData'],
           date: help.formatDate(entry['contentDate']),
         });
       }
       const data = JSON.stringify({ fileVersions: fileVersions });
       response.send(data);
+      response.end();
+      return;
+    });
+  });
+
+  app.post('/selectDB_SaveFile', (request, response) => {
+    // TODO: check if user is allowed to do that!
+    const path = mysql.escape(request.body.path);
+    const version = 888; // TODO!!
+    const userId = 1; // TODO
+    const text = mysql.escape(request.body.text);
+    const query =
+      'INSERT INTO Content ' +
+      '(contentPath, contentVersion, contentUserId, contentData) ' +
+      'VALUES ' +
+      '(' +
+      path +
+      ', ' +
+      version +
+      ', ' +
+      userId +
+      ', ' +
+      text +
+      ')';
+    console.log(query);
+    connection.query(query, [], function (error, results, fields) {
+      response.send('OK');
       response.end();
       return;
     });
