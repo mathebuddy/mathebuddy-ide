@@ -13,6 +13,7 @@ export class Table {
   private rows: TableRow[] = [];
   private rowButtons: TableButton[] = [];
   private inputRowButtons: TableButton[] = [];
+  private logDiv: HTMLElement = null;
 
   public addHeadline(s: string): void {
     this.headlines.push(s);
@@ -44,6 +45,10 @@ export class Table {
     fun: (id: number) => void,
   ): void {
     this.inputRowButtons.push(new TableButton(text, tooltipText, fun));
+  }
+
+  public setLogHTML(logHTML: string): void {
+    this.logDiv.innerHTML = logHTML;
   }
 
   public populateDOM(e: HTMLElement): void {
@@ -111,6 +116,10 @@ export class Table {
         td.appendChild(separator);
       }
     }
+    // log
+    this.logDiv = document.createElement('div');
+    this.logDiv.classList.add('mx-2');
+    e.appendChild(this.logDiv);
   }
 }
 

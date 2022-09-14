@@ -7,7 +7,6 @@
  */
 
 import axios from 'axios';
-import { showTooltips } from '.';
 
 import { Table } from './table';
 
@@ -46,13 +45,30 @@ export function refreshContent(): void {
         '<i class="fa-solid fa-square-plus"></i>',
         'create',
         function (): void {
-          console.log(
-            (document.getElementById('create_content_0') as HTMLInputElement)
-              .value,
-          );
-          console.log('create ');
+          // TODO: check, if path is valid!! COURSE/FILE
+          const path = (
+            document.getElementById('create_content_0') as HTMLInputElement
+          ).value;
+          console.log('create file ' + path);
+          axios
+            .post('writeDB_Content', new URLSearchParams({ path: path }))
+            .then(function (response) {
+              console.log(response.data);
+              if (response.data === 'OK') {
+                refreshContent();
+              } else {
+                table.setLogHTML(
+                  '<span class="text-danger">' + response.data + '</span>',
+                );
+              }
+            })
+            .catch(function (error) {
+              // TODO
+              console.error('ERROR!!' + error);
+            });
         },
       );
+      table.addInputRow(1, 'create_content');
       const rows = response.data['rows'];
       for (const row of rows) {
         table.addRow(
@@ -65,7 +81,6 @@ export function refreshContent(): void {
           row['id'],
         );
       }
-      table.addInputRow(1, 'create_content');
       table.populateDOM(document.getElementById('course-management-table'));
       //showTooltips();
     })
