@@ -19,6 +19,7 @@ const express = require('express');
 const session = require('express-session');
 const mysql = require('mysql');
 const bcrypt = require('bcryptjs');
+const lex = require('@multila/multila-lexer');
 
 console.log('mathe:buddy IDE, 2022 by Andreas Schwenk, TH Koeln');
 
@@ -61,20 +62,58 @@ app.get('/', (request, response) => {
   response.sendFile('index.html', { root: __dirname });
 });
 
+app.post('/updateDB_ContentPath', (request, response) => {
+  // This handler changes the path in table Content for all versions of that file.
+  const contentId = request.body.id;
+  const contentNewPath = request.body.path;
+  const query =
+    'UPDATE Content ' +
+    'SET contentPath=' +
+    mysql.escape(contentNewPath) +
+    ' ' +
+    'WHERE contentPath=(SELECT contentPath FROM Content WHERE id=' +
+    mysql.escape(contentId) +
+    ')';
+  // update database
+  // TODO: error handling
+  connection.query(query, [], function (error, results, fields) {
+    response.send('OK');
+    response.end();
+    return;
+  });
+});
+
+// TODO: rename "write" to "insert"
 app.post('/writeDB_Content', (request, response) => {
-  // TODO: check if user is allowed to
+  // TODO: check if user is allowed to do this
   // TODO: check if same path already exists
-  // TODO: write correct user id
-  const path = request.body.path;
+  // TODO: write correct user id into database
+  const path = request.body.path.trim();
+  // check path format. Grammar in EBNF: path = ID "/" ID;
+  const lexer = new lex.Lexer();
+  lexer.pushSource('', path);
+  try {
+    lexer.ID();
+    lexer.TER('/');
+    lexer.ID();
+  } catch (e) {
+    response.send('The path is invalid. Format must be: COURSE/PATH');
+    response.end();
+    return;
+  }
+  // create database query
   const query =
     'INSERT INTO Content ' +
     '(contentPath, contentVersion, contentUserId, contentData) ' +
     'VALUES (' +
     mysql.escape(path) +
     ", 1, 1, 'still empty')";
+  // update database
+  // TODO: error handling
   connection.query(query, [], function (error, results, fields) {
     response.send('OK');
     response.end();
+    return;
   });
 });
 
@@ -113,6 +152,7 @@ app.post('/readDB_Content', (request, response) => {
     const data = JSON.stringify({ rows: rows });
     response.send(data);
     response.end();
+    return;
   });
 });
 
@@ -138,6 +178,7 @@ app.post('/readDB_User', (request, response) => {
     const data = JSON.stringify({ rows: rows });
     response.send(data);
     response.end();
+    return;
   });
 });
 
@@ -165,6 +206,7 @@ app.post('/readDB_Access', (request, response) => {
     const data = JSON.stringify({ rows: rows });
     response.send(data);
     response.end();
+    return;
   });
 });
 
