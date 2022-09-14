@@ -6,6 +6,13 @@
  * License: GPL-3.0-or-later
  */
 
+/*// TODO!!
+import * as diff from 'diff';
+
+const a = 'blubxxx\n1\n2\n3';
+const b = 'blxubxx\n1\n2\n4';
+console.log(diff.diffLines(a, b));*/
+
 import * as bootstrap from 'bootstrap';
 
 import 'codemirror/mode/clike/clike';
@@ -16,13 +23,16 @@ import 'codemirror/addon/mode/overlay';
 // esbuild requires 'codemirror' import AFTER modes and addons
 import * as CodeMirror from 'codemirror';
 
-import { refreshContent } from './content';
+import { refreshContent, refreshCourseList } from './content';
 import { refreshUsers } from './users';
 
 export let editor: CodeMirror.EditorFromTextArea = null;
 let tooltipList: bootstrap.Tooltip[] = [];
 
 export function init(): void {
+  // refresh course list
+  refreshCourseList();
+
   // init code editor
   CodeMirror.defineSimpleMode('sellquiz-edit', {
     // TODO: rename
@@ -34,7 +44,7 @@ export function init(): void {
       { regex: /#.*/, token: 'keyword', sol: true },
       {
         regex:
-          /---|========|Definition\.|Example\.|Theorem\.|Proof\.|Chatquestion\.|Question\.|Remark\.|JavaQuestion\.|Python\.|Authentication\.|Tikz\.|Speedreview\.|Links\.|Plot2d\.|!tex|!lang=EN|!lang=DE|!require-authentication|!require-min-score|@tags|@title|@code|@text|@solution|@given|@asserts|@options|@questions|@forbidden-keywords|@python|@matching|\/\/\/|@settings|@sage|@octave|@maxima|@answer|@database|@input|@required-keywords/,
+          /---|========|EXERCISE |Definition\.|Example\.|Theorem\.|Proof\.|Chatquestion\.|Question\.|Remark\.|JavaQuestion\.|Python\.|Authentication\.|Tikz\.|Speedreview\.|Links\.|Plot2d\.|!tex|!lang=EN|!lang=DE|!require-authentication|!require-min-score|@tags|@title|@code|@text|@solution|@given|@asserts|@options|@questions|@forbidden-keywords|@python|@matching|\/\/\/|@settings|@sage|@octave|@maxima|@answer|@database|@input|@required-keywords/,
         token: 'keyword',
       },
     ],
@@ -147,13 +157,6 @@ export function hideTooltips(): void {
   }
   tooltipList = [];
 }
-
-// TODO!!
-import * as diff from 'diff';
-
-const a = 'blubxxx\n1\n2\n3';
-const b = 'blxubxx\n1\n2\n4';
-console.log(diff.diffLines(a, b));
 
 export function openTextInputModal(
   title: string,
