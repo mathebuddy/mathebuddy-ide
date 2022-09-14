@@ -200,7 +200,7 @@
             class="dropdown"
             style="display: inline-block"
             data-bs-toggle="tooltip"
-            data-bs-placement="top"
+            data-bs-placement="left"
             title="course selection"
           >
             <button
@@ -208,9 +208,12 @@
               type="button"
               id="courselist_button"
               data-bs-toggle="dropdown"
-              onclick="hide_tooltips();"
+              onclick=""
             ></button>
-            <ul id="courselist_dropdown_items" class="dropdown-menu"></ul>
+            <ul id="courselist_dropdown_items" class="dropdown-menu">
+              <li><a class="dropdown-item" style="cursor: pointer">hm1</a></li>
+              <li><a class="dropdown-item" style="cursor: pointer">hm2</a></li>
+            </ul>
           </div>
           &nbsp;&nbsp;&nbsp;
           <span class="text-primary"><i class="fas fa-file"></i></span>
@@ -218,7 +221,7 @@
             class="dropdown"
             style="display: inline-block"
             data-bs-toggle="tooltip"
-            data-bs-placement="top"
+            data-bs-placement="right"
             title="document selection"
           >
             <button
@@ -226,14 +229,14 @@
               type="button"
               id="filelist_button"
               data-bs-toggle="dropdown"
-              onclick="hide_tooltips();"
+              onclick=""
             ></button>
             <ul id="filelist_dropdown_items" class="dropdown-menu"></ul>
           </div>
 
           &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
 
-          <span data-bs-toggle="modal" data-bs-target="#insertCodeModal">
+          <!--<span data-bs-toggle="modal" data-bs-target="#insertCodeModal">
             <button
               id="insertCodeButton"
               type="button"
@@ -244,8 +247,8 @@
             >
               <i class="fas fa-pencil-alt"></i>
             </button>
-          </span>
-          <div
+          </span>-->
+          <!--<div
             class="dropdown"
             style="display: inline-block"
             data-bs-toggle="tooltip"
@@ -264,7 +267,7 @@
             <div class="dropdown-menu">
               <div id="math-symbols" class="yamm-content"></div>
             </div>
-          </div>
+          </div>-->
           <button
             type="button"
             class="btn btn-outline-dark mx-0 btn-sm"
@@ -529,9 +532,68 @@
 
         <div
           class="col m-0 p-0 border-end"
-          style="height: 100%; overflow-y: scroll; background-color: #505050"
+          style="height: 100%; background-color: #505050"
         >
-          <div id="rendered-content" class="col p-2"></div>
+          <div class="container">
+            <div class="row p-2 m-0">
+              <div
+                class="col p-0 m-0"
+                style="
+                  min-width: 360px;
+                  width: 360px;
+                  max-width: 360px;
+                  min-height: 700px;
+                  height: 700px;
+                  max-height: 700px;
+                  background-color: white;
+                  /*background-image: url('img/app-bg.png');*/
+                  border-radius: 20px;
+                "
+              >
+                <img
+                  class="p-0 mx-0 mt-0 mb-3"
+                  src="img/app-bg.png"
+                  style="width: 100%"
+                />
+                <div class="col px-3" style="height: 550px; overflow-y: scroll">
+                  <h4 class="text-center">KOMPLEXE ZAHLEN</h4>
+                  <br />
+                  <div>
+                    <h5>Einführung</h5>
+                  </div>
+                  <br />
+                  <p>
+                    Über den reellen Zahlen können Gleichungen wie $x^2=-1$
+                    nicht gelöst werden, da keine Quadratzahlen... Lorem ipsum
+                    dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                    eirmod tempor invidunt ut labore et dolore magna aliquyam
+                    erat, sed diam voluptua. At vero eos et accusam et justo duo
+                    dolores et ea rebum. Stet clita kasd gubergren, no sea
+                    takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+                    dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                    eirmod tempor invidunt ut labore et dolore magna aliquyam
+                    erat, sed diam voluptua. At vero eos et accusam et justo duo
+                    dolores et ea rebum. Stet clita kasd gubergren, no sea
+                    takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+                    dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                    eirmod tempor invidunt ut labore et dolore magna aliquyam
+                    erat, sed diam voluptua. At vero eos et accusam et justo duo
+                    dolores et ea rebum. Stet clita kasd gubergren, no sea
+                    takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+                    dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                    eirmod tempor invidunt ut labore et dolore magna aliquyam
+                    erat, sed diam voluptua. At vero eos et accusam et justo duo
+                    dolores et ea rebum. Stet clita kasd gubergren, no sea
+                    takimata sanctus est Lorem ipsum dolor sit amet.
+                  </p>
+                </div>
+              </div>
+
+              <div class="col p-2 m-2 bg-dark text-light rounded">
+                variables<br />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
