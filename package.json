@@ -43,6 +43,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.2.0",
     "@geedmo/yamm": "^4.0.1",
+    "@multila/multila-lexer": "^0.9.0",
     "@types/bootstrap": "^5.2.4",
     "@types/diff": "^5.0.2",
     "axios": "^0.27.2",
