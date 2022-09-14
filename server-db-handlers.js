@@ -7,6 +7,7 @@
  */
 
 const help = require('./server-help.js');
+const mysql = require('mysql');
 
 module.exports.initDatabaseHandlers = function (app, connection) {
   // This handler changes the path in table Content for all versions of that file.
@@ -58,6 +59,78 @@ module.exports.initDatabaseHandlers = function (app, connection) {
     // TODO: error handling
     connection.query(query, [], function (error, results, fields) {
       response.send('OK');
+      response.end();
+      return;
+    });
+  });
+
+  app.post('/selectDB_Courses', (request, response) => {
+    // TODO: only get content rows with read access for current user
+    const query = 'SELECT contentPath FROM Content ORDER BY contentPath';
+    connection.query(query, [], function (error, results, fields) {
+      const courses = [];
+      for (const entry of results) {
+        const course = entry['contentPath'].split('/')[0];
+        if (courses.includes(course)) continue;
+        courses.push(course);
+      }
+      const data = JSON.stringify({ courses: courses });
+      response.send(data);
+      response.end();
+      return;
+    });
+  });
+
+  app.post('/selectDB_CourseFiles', (request, response) => {
+    // TODO: only get content files with read access for current user
+    let courseName = mysql.escape(request.body.courseName);
+    courseName = courseName.substring(0, courseName.length - 1);
+    const query =
+      'SELECT contentPath FROM Content WHERE contentPath LIKE ' +
+      courseName +
+      "/%' ORDER BY contentPath;";
+    //console.log(query);
+    connection.query(query, [], function (error, results, fields) {
+      const files = [];
+      for (const entry of results) {
+        const file = entry['contentPath'].split('/')[1];
+        if (files.includes(file)) continue;
+        files.push(file);
+      }
+      const data = JSON.stringify({ files: files });
+      response.send(data);
+      response.end();
+      return;
+    });
+  });
+
+  app.post('/selectDB_ReadFile', (request, response) => {
+    // TODO: only get content files with read access for current user
+    let path = mysql.escape(request.body.path);
+    const query =
+      'SELECT contentPath, contentVersion, contentUserId, contentData, ' +
+      'contentDate ' +
+      'FROM Content ' +
+      'WHERE contentPath=' +
+      path +
+      ' ' +
+      'ORDER BY contentVersion';
+    //console.log(query);
+    connection.query(query, [], function (error, results, fields) {
+      const fileVersions = [];
+      //console.log(query);
+      //console.log(results);
+      for (const entry of results) {
+        fileVersions.push({
+          path: entry['contentPath'],
+          version: entry['contentVersion'],
+          userId: entry['contentUserId'],
+          data: entry['contentData'],
+          date: help.formatDate(entry['contentDate']),
+        });
+      }
+      const data = JSON.stringify({ fileVersions: fileVersions });
+      response.send(data);
       response.end();
       return;
     });
