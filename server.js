@@ -65,6 +65,19 @@ connection.query(
   },
 );
 
+// refresh example course
+const example = fs.readFileSync('database/demo_demo1.txt', 'utf-8');
+connection.query(
+  'UPDATE Content ' +
+    'SET contentData=' +
+    mysql.escape(example) +
+    ' ' +
+    'WHERE contentPath=' +
+    mysql.escape('demo/demo1'),
+  [],
+  function (error, results, fields) {},
+);
+
 // create express.js application
 const app = express();
 
