@@ -1,0 +1,14 @@
+Hello, world @intro
+###################
+
+Some text here. %This text is a comment.
+
+---
+EXERCISE My Exercise @myExerciseLabel
+@code
+let x = rand(1, 5);
+let y = rand(1, 5);
+let z = x + y;
+@text
+Calculate $ x + y = #z $.
+---

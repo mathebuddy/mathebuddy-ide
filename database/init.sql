@@ -21,15 +21,19 @@ CREATE OR REPLACE TABLE Content (
 INSERT INTO Content
   (contentPath, contentVersion, contentUserId, contentData)
   VALUES
-  ('hm1/intro', 1, 1, 'blub');
+  ('demo/demo1', 1, 1, '');
 INSERT INTO Content
   (contentPath, contentVersion, contentUserId, contentData)
   VALUES
-  ('hm1/intro', 2, 1, 'blub');
+  ('hm1/intro', 1, 1, '');
 INSERT INTO Content
   (contentPath, contentVersion, contentUserId, contentData)
   VALUES
-  ('hm1/functions', 1, 1, 'bla');
+  ('hm1/functions', 1, 1, 'blub');
+INSERT INTO Content
+  (contentPath, contentVersion, contentUserId, contentData)
+  VALUES
+  ('hm1/functions', 2, 1, 'bla');
 
 /* Users */
 CREATE OR REPLACE TABLE User (
