@@ -6,8 +6,6 @@
  * License: GPL-3.0-or-later
  */
 
-import { hideTooltips, showTooltips } from '.';
-
 export class Table {
   private headlines: string[] = [];
   private rows: TableRow[] = [];
@@ -112,7 +110,7 @@ export class Table {
         button.innerHTML = b.text;
         button.onclick = function (): void {
           b.fun(row.id);
-          hideTooltips();
+          //hideTooltips();
           button.blur();
         };
         td.appendChild(button);

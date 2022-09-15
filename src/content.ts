@@ -7,12 +7,8 @@
  */
 
 import axios from 'axios';
-import {
-  closeTextInputModal,
-  editor,
-  hideTooltips,
-  openTextInputModal,
-} from '.';
+import { closeTextInputModal, openTextInputModal } from '.';
+import { editor, refreshEditor, setEditorText } from './editor';
 
 import { Table } from './table';
 
@@ -20,9 +16,7 @@ let selectedCourse = '';
 let selectedFile = '';
 
 export function saveFile(): void {
-  TODO: server-handler must store correct version number; must update file status row;
-
-  hideTooltips();
+  if (editor == null) return;
   if (selectCourse.length == 0 || selectFile.length == 0) {
     // TODO: error message
     return;
@@ -38,7 +32,7 @@ export function saveFile(): void {
     )
     .then(function (response) {
       console.log(response);
-      // TODO: provess response
+      // TODO: process response
     })
     .catch(function (error) {
       // TODO
@@ -74,8 +68,11 @@ export function selectFile(fileName: string): void {
       document.getElementById('course-editor-file-status').innerHTML =
         path + ' &bull; v' + version + ' &bull; ' + user + ' &bull; ' + date;
       // TODO: old document might be unsaved!
-      editor.setValue(text);
-      editor.focus();
+      console.log(text);
+      setEditorText(text);
+      /*editor.setValue(text);
+      refreshEditor();
+      editor.focus();*/
     })
     .catch(function (error) {
       // TODO
@@ -244,7 +241,6 @@ export function refreshContent(): void {
         );
       }
       table.populateDOM(document.getElementById('course-management-table'));
-      //showTooltips();
     })
     .catch(function (error) {
       // TODO
