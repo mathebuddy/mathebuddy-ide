@@ -69,7 +69,7 @@
     <div class="row m-0 p-0 w-100">
       <div class="col m-0 p-0 w-100">
         <ul class="nav nav-tabs m-0 p-0 w-100 bg-dark">
-          <li class="nav-item">&nbsp;&nbsp;</li>
+          <li class="nav-item">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
           <li class="nav-item">
             <span data-bs-toggle="modal" data-bs-target="#modal-login">
               <button id="login" type="button" class="btn btn-success mx-0 btn-sm" data-bs-toggle="tooltip"
@@ -93,21 +93,30 @@
             </a>
           </li>
           <li class="nav-item">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
-          <li class="nav-item">
-            <a id="tab-course-editor" class="nav-link active" data-bs-toggle="tooltip" data-bs-placement="bottom"
-              title="edit document" style="cursor: pointer" onclick="mathebuddyIDE.openTab('course-editor');">
+          <li class="nav-item text-start">
+            <a id="tab-home" class="nav-link active" data-bs-toggle="tooltip" data-bs-placement="bottom" title="home"
+              style="width: 50px; cursor: pointer" onclick="mathebuddyIDE.openTab('home');">
+              <i class="fa-solid fa-house h5"></i>
+            </a>
+          </li>
+          <li class="nav-item text-center">
+            <a id="tab-course-editor" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="bottom"
+              title="edit document" style="width: 50px; cursor: pointer"
+              onclick="mathebuddyIDE.openTab('course-editor');">
               <i class="fas fa-file-alt h5"></i>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item text-start">
             <a id="tab-course-management" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="bottom"
-              title="course management" style="cursor: pointer" onclick="mathebuddyIDE.openTab('course-management');">
+              title="course management" style="width: 50px; cursor: pointer"
+              onclick="mathebuddyIDE.openTab('course-management');">
               <i class="fa-solid fa-sitemap h5"></i>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item text-center">
             <a id="tab-user-management" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="bottom"
-              title="user management" style="cursor: pointer" onclick="mathebuddyIDE.openTab('user-management');">
+              title="user management" style="width: 50px; cursor: pointer"
+              onclick="mathebuddyIDE.openTab('user-management');">
               <i class="fas fa-user h5"></i>
             </a>
           </li>
@@ -124,8 +133,14 @@
   <!-- SUB MENU -->
   <div id="container" class="container-fluid p-0 m-0">
     <div class="row m-0 p-0">
+      <!-- empty submenu -->
+      <div id="empty-submenu" class="col text-center border-end border-bottom py-1" style="display: block">
+        <p class="text-secondary small">
+          Funded by <i>Stiftung Innovation in der Hochschullehre</i> &nbsp;&mdash;&nbsp; FREIRAUM 2022
+        </p>
+      </div>
       <!-- course editor submenu -->
-      <div id="course-editor-submenu" class="col text-center border-end border-bottom py-1">
+      <div id="course-editor-submenu" class="col text-center border-end border-bottom py-1" style="display: none;">
         <span class="text-primary"><i class="fas fa-layer-group"></i></span>
         <div class="dropdown" style="display: inline-block" data-bs-toggle="tooltip" data-bs-placement="left"
           title="course selection">
@@ -231,8 +246,6 @@
           <i class="fa-solid fa-floppy-disk"></i>
         </button>-->
       </div>
-      <!-- empty submenu -->
-      <div id="empty-submenu" class="col text-center border-end border-bottom py-1" style="display: none"></div>
       <!-- preview submenu -->
       <div id="preview-submenu" class="col text-center border-end border-bottom py-1">
         &nbsp;&nbsp;&nbsp;
@@ -291,15 +304,103 @@
   <!-- WORKING AREA -->
   <div id="container" class="container-fluid p-0 m-0" style="height: 100%">
     <div class="row m-0 p-0" style="height: 100%">
-      <div id="course-editor" class="col m-0 p-0 border-end w-100" style="height: 100%">
 
+      <div id="home" class="col m-0 p-0 border-end w-100" style="height: 100%; overflow-y: scroll; overflow-x: hidden;">
+        <div class="row">
+          <div class="col m-3 lead">
+
+            <!--<h1>Welcome to mathe:buddy IDE</h1>-->
+
+            <div class="text-start">
+              <img src="img/logo-large-en.svg" style="height: 176px;" />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+
+            <br />
+
+            <p>The <b>mathe:buddy IDE<sup>1</sup></b> provides
+              tools to
+              create dynamic courses for mobile devices easily.
+            </p>
+            <br />
+
+            <h2>First Steps</h2>
+            <ul>
+              <li>
+                <i>Preliminary note:</i> This page can be reopened with <i class="fa-solid fa-house text-primary"></i>
+                in the main menu.
+              </li>
+              <li>
+                Visit the <b>demo</b> course:
+                <ul>
+                  <li>
+                    Open the <b>editor</b> by clicking on <i class="fas fa-file-alt text-primary"></i> in the main menu.
+                  </li>
+                  <li>
+                    Click on <i class="fas fa-layer-group text-primary"></i> and select <b>demo</b> in the
+                    dropdown menu.
+                  </li>
+                  <li>
+                    Then click on any of the files opened by <i class="fas fa-file text-primary"></i>.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Start the <b>simulator</b> by pressing <i class="fa-solid fa-play text-success"></i>.
+              </li>
+              <li>
+                Edit the <b>source code</b> in the editor and run again.
+              </li>
+            </ul>
+            Register via <i class="fas fa-sign-in-alt text-success"></i> to create, save and publish your own
+            courses.
+            Have fun!
+
+            <br /><br />
+
+            <h2>Documentation</h2>
+            <ul>
+              <li>
+                You'll find the complete documentation <a href="https://app.f07-its.fh-koeln.de/docs/build/index.html"
+                  target="_blank">here</a>.
+              </li>
+              <li>
+                Visit <a href="https://app.f07-its.fh-koeln.de/" target="_blank">https://app.f07-its.fh-koeln.de/</a>
+                for general information.
+              </li>
+              <li>
+                Visit <a href="https://github.com/mathebuddy" target="_blank">https://github.com/mathebuddy</a>
+                to find the source code of this IDE.
+              </li>
+            </ul>
+
+            <br />
+
+            &mdash;
+            <p class="small">
+              <sup>1</sup>IDE := Integrated Development
+              Environment
+            </p>
+
+            <p class="text-secondary">
+              &copy; 2022 Prof. Dr. Heiko Knospe, Patricia Maria Graf B.Sc., <a href="https://arts-and-sciences.com"
+                target="_blank">Andreas Schwenk M.Sc.</a>, TH
+              Köln.
+            </p>
+
+          </div>
+        </div>
+      </div>
+
+      <div id="course-editor" class="col m-0 p-0 border-end w-100" style="display: none; height: 100%">
         <div class="row m-0 py-0 px-1 text-center border-bottom border-right" style="height: 24px;">
           <div id="course-editor-file-status" class="col m-0 p-0 text-center text-secondary">
             <!-- e.g. hm1/intro &bull; v1 &bull; admin &bull; 2022-09-14 17:42:00 -->
           </div>
         </div>
-
-        <textarea class="m-0 p-0 w-100" id="editor" style="width: 100%"></textarea>
+        <div class="m-0 p-0 border-bottom">
+          <textarea id="editor" class="m-0 p-0 w-100" style="width: 100%; display: none;"></textarea>
+        </div>
       </div>
 
       <div id="course-management" class="col m-0 p-0 border-end w-100"
@@ -366,8 +467,8 @@
               </div>
             </div>
 
-            <div class="col p-2 m-2 bg-dark text-light rounded">
-              variables<br />
+            <div class="col p-2 mx-4 bg-dark text-light rounded">
+
             </div>
           </div>
         </div>
