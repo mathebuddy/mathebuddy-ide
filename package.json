@@ -43,6 +43,8 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.2.0",
     "@geedmo/yamm": "^4.0.1",
+    "@mathebuddy/mathebuddy-compiler": "file:../mathebuddy-compiler",
+    "@mathebuddy/mathebuddy-simulator": "file:../mathebuddy-simulator",
     "@multila/multila-lexer": "^0.9.0",
     "@types/bootstrap": "^5.2.4",
     "@types/diff": "^5.0.2",
@@ -53,6 +55,7 @@
     "diff": "^5.1.0",
     "express": "^4.18.1",
     "express-session": "^1.17.3",
+    "mathebuddy-compiler": "file:../mathebuddy-compiler",
     "mysql": "^2.18.1"
   }
 }
