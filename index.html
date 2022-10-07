@@ -209,13 +209,12 @@
 
         &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
 
-        <button type="button" class="btn btn-outline-success mx-0 btn-sm" data-bs-toggle="tooltip"
-          data-bs-placement="bottom" title="fast update [F1]" onclick="hide_tooltips();slwEditor.updateEmulator(true);">
+        <!--<button type="button" class="btn btn-outline-success mx-0 btn-sm" data-bs-toggle="tooltip"
+          data-bs-placement="bottom" title="fast update [F1]" onclick="mathebuddyIDE.updateSimulator();">
           <i class="fa-solid fa-forward-fast"></i>
-        </button>
+        </button>-->
         <button type="button" class="btn btn-outline-success mx-0 btn-sm" data-bs-toggle="tooltip"
-          data-bs-placement="bottom" title="full update [F2]"
-          onclick="hide_tooltips();slwEditor.updateEmulator(false);">
+          data-bs-placement="bottom" title="update [F1]" onclick="mathebuddyIDE.updateSimulator();">
           <i class="fa-solid fa-play"></i>
         </button>
 
@@ -432,8 +431,14 @@
                   /*background-image: url('img/app-bg.png');*/
                   border-radius: 20px;
                 ">
-              <img class="p-0 mx-0 mt-0 mb-3" src="img/app-bg.png" style="width: 100%" />
-              <div class="col px-3" style="height: 550px; overflow-y: scroll">
+              <img class="p-0 mx-0 mt-0 mb-0" src="img/app-bg.png" style="width: 100%" />
+              <div id="device-content" class="col px-3"
+                style="height: 550px; font-size: 85%; transform: translate(0,-5px); overflow-x:hidden; overflow-y: scroll;">
+
+                <br /><br /><br />
+                <h4 class="text-center text-secondary">(not running)</h4>
+
+                <!--
                 <h4 class="text-center">KOMPLEXE ZAHLEN</h4>
                 <br />
                 <div>
@@ -464,10 +469,13 @@
                   dolores et ea rebum. Stet clita kasd gubergren, no sea
                   takimata sanctus est Lorem ipsum dolor sit amet.
                 </p>
+                -->
+
               </div>
             </div>
 
-            <div class="col p-2 mx-4 bg-dark text-light rounded">
+            <div id="simulator-log" class="col p-2 mx-4 bg-dark text-light rounded"
+              style="max-height: 640px; overflow: scroll;">
 
             </div>
           </div>
