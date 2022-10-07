@@ -8,22 +8,51 @@
 
 /*// TODO!!
 import * as diff from 'diff';
-
 const a = 'blubxxx\n1\n2\n3';
 const b = 'blxubxx\n1\n2\n4';
 console.log(diff.diffLines(a, b));*/
 
+import { Simulator } from '@mathebuddy/mathebuddy-simulator/lib/sim';
+import { Compiler } from '@mathebuddy/mathebuddy-compiler/lib/';
+
 import * as bootstrap from 'bootstrap';
 
 import { refreshContent, refreshCourseList } from './content';
-import { initEditor, refreshEditor } from './editor';
+import { editor, initEditor, refreshEditor } from './editor';
 import { refreshUsers } from './users';
+import { DocContainer } from '@mathebuddy/mathebuddy-simulator/lib/interfaces';
 
 let tooltipList: bootstrap.Tooltip[] = [];
 
 export function init(): void {
   initEditor();
   refreshCourseList();
+}
+
+export function updateSimulator(): void {
+  const data = editor.getValue();
+  const compiler = new Compiler();
+  compiler.run(data);
+  const compiledCourse = compiler.getCourse().toJSON();
+  console.log(compiledCourse);
+
+  const deviceContentElement = document.getElementById('device-content');
+  const sim = new Simulator(
+    compiledCourse as any as DocContainer, // TODO: "any"
+    deviceContentElement,
+  );
+  const ok = sim.generateDOM('intro'); // TODO
+  if (ok) {
+    document.getElementById('simulator-log').innerHTML = sim.getJSON();
+  } else {
+    document.getElementById('simulator-log').innerHTML =
+      'Error: DOCUMENT NOT FOUND';
+  }
+
+  /*const sim = mathebuddySIM.createSim(documentData, deviceContent, logContent);
+  if (mathebuddySIM.generateDOM(sim, 'intro') == false) {
+    console.log("ERROR: there is no document 'intro'");
+  }*/
 }
 
 export function openTab(id: string): void {
