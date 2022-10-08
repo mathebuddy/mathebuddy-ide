@@ -20,5 +20,5 @@
       }
     ]
   },
-  "ignorePatterns": ["server*.js"]
+  "ignorePatterns": ["server*.js", "desktop.js"]
 }
