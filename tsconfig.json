@@ -14,5 +14,11 @@
     "downlevelIteration": true,
     "lib": ["DOM", "ES2020"]
   },
-  "include": ["src/**/*.ts", "test/**/*.ts", "server*.js", "./build.mjs"]
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "server*.js",
+    "desktop.js",
+    "./build.mjs"
+  ]
 }
